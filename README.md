@@ -280,7 +280,7 @@ property-bazzar/
 ├── .gitignore
 └── README.md
 
-
+```
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!  
