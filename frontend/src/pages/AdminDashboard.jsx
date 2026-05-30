@@ -161,7 +161,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Overview Tab (Analytics) */}
+        {}
         {activeTab === 'overview' && (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
           </>
         )}
 
-        {/* Properties Tab (Table with View Details) */}
+        {}
         {activeTab === 'properties' && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
             <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200 mb-4">Property Verification Requests</h3>
@@ -295,7 +295,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Activity Tab */}
+        {}
         {activeTab === 'activity' && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
             <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200 mb-4">Recent Verification Activity</h3>
@@ -339,7 +339,7 @@ const AdminDashboard = () => {
         )}
       </div>
 
-      {/* ========== PROPERTY DETAIL MODAL ========== */}
+      {}
       {showModal && selectedProperty && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={closeModal}>
           <motion.div

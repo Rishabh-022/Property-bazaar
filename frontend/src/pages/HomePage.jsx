@@ -65,13 +65,13 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       
-      {/* ============ HERO SECTION ============ */}
+      {}
       <section className="relative min-h-screen flex items-center overflow-hidden" 
         style={{
           background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 25%, #bfdbfe 50%, #93c5fd 75%, #60a5fa 100%)'
         }}
       >
-        {/* Animated floating circles */}
+        {}
         {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
@@ -100,17 +100,17 @@ const HomePage = () => {
           />
         ))}
 
-        {/* Content */}
+        {}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             
-            {/* Left Column - Text */}
+            {}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              {/* Badge */}
+              {}
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -129,7 +129,7 @@ const HomePage = () => {
                 {t('home.heroSubtitle')}
               </p>
 
-              {/* CTA Buttons – dynamic based on login */}
+              {}
               <div className="flex flex-wrap gap-4">
                 {user ? (
                   <Link to="/properties">
@@ -176,7 +176,7 @@ const HomePage = () => {
                 )}
               </div>
 
-              {/* Stats Row */}
+              {}
               <div className="flex gap-8 mt-12">
                 {[
                   { num: '2,500+', label: t('home.stats.properties'), color: 'text-blue-600 dark:text-blue-400' },
@@ -196,7 +196,7 @@ const HomePage = () => {
               </div>
             </motion.div>
 
-            {/* Right Column - Visual (unchanged) */}
+            {}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -254,7 +254,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ============ FEATURES SECTION ============ */}
+      {}
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
@@ -319,7 +319,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ============ FEATURED PROPERTIES SECTION ============ */}
+      {}
       {featuredProperties.length > 0 && (
         <section className="py-24 bg-gradient-to-b from-white dark:from-gray-900 to-blue-50 dark:to-gray-800">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -445,7 +445,7 @@ const HomePage = () => {
         </section>
       )}
 
-      {/* ============ CTA SECTION ============ */}
+      {}
       <section className="py-24 bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-900 dark:to-gray-900">
         <div className="max-w-4xl mx-auto text-center px-6">
           <motion.div

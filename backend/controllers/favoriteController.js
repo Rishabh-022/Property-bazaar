@@ -1,8 +1,5 @@
 const User = require('../models/User');
 
-// @desc    Toggle property in user's favorites
-// @route   POST /api/users/favorites/:propertyId
-// @access  Private
 const toggleFavorite = async (req, res) => {
     try {
         const propertyId = req.params.propertyId;
@@ -37,9 +34,6 @@ const toggleFavorite = async (req, res) => {
     }
 };
 
-// @desc    Get user's favorite properties
-// @route   GET /api/users/favorites
-// @access  Private
 const getFavorites = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).populate('savedProperties');

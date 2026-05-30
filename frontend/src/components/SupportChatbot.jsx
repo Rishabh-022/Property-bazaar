@@ -18,7 +18,6 @@ const SupportChatbot = () => {
     { label: '🤔 Something else', reply: 'Email support@propertybazzar.com or call +91 1800-123-4567' },
   ];
 
-  // Handle quick‑reply buttons (static, no API call)
   const handleOptionClick = (option) => {
     setMessages(prev => [...prev, { sender: 'user', text: option.label }]);
     setTimeout(() => {
@@ -26,13 +25,11 @@ const SupportChatbot = () => {
     }, 500);
   };
 
-  // Handle free‑text input → call backend
   const handleSend = async (e) => {
     e.preventDefault();
     const query = input.trim();
     if (!query) return;
 
-    // Add user message
     setMessages(prev => [...prev, { sender: 'user', text: query }]);
     setInput('');
     setLoading(true);
@@ -57,7 +54,7 @@ const SupportChatbot = () => {
             <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-200 text-xl">&times;</button>
           </div>
 
-          {/* Messages */}
+          {}
           <div className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-3">
             {messages.map((msg, idx) => (
               <div
@@ -74,7 +71,7 @@ const SupportChatbot = () => {
             {loading && <div className="text-xs text-gray-400 italic">Thinking...</div>}
           </div>
 
-          {/* Quick reply buttons */}
+          {}
           <div className="p-2 bg-white border-t border-gray-100 flex flex-wrap gap-1 overflow-y-auto max-h-24">
             {options.map((opt, idx) => (
               <button
@@ -87,7 +84,7 @@ const SupportChatbot = () => {
             ))}
           </div>
 
-          {/* Free‑text input */}
+          {}
           <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
             <input
               type="text"
@@ -107,7 +104,7 @@ const SupportChatbot = () => {
         </div>
       )}
 
-      {/* Floating button */}
+      {}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-blue-600 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-2xl transition transform hover:scale-110 ml-auto block"

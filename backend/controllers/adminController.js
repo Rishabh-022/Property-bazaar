@@ -6,9 +6,6 @@ const cloudinary = require('../config/cloudinary');
 const transporter = require('../config/email');
 const { propertyApprovedEmail, propertyRejectedEmail } = require('../utils/emailTemplates');
 
-// @desc    Get dashboard stats
-// @route   GET /api/admin/stats
-// @access  Private/Admin
 const getDashboardStats = async (req, res) => {
     try {
         const totalProperties = await Property.countDocuments();
@@ -42,9 +39,6 @@ const getDashboardStats = async (req, res) => {
     }
 };
 
-// @desc    Get all properties for admin
-// @route   GET /api/admin/properties
-// @access  Private/Admin
 const getAllProperties = async (req, res) => {
     try {
         const { status, page = 1, limit = 20 } = req.query;
@@ -80,9 +74,6 @@ const getAllProperties = async (req, res) => {
     }
 };
 
-// @desc    Get single property details
-// @route   GET /api/admin/properties/:id
-// @access  Private/Admin
 const getPropertyDetails = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id)
@@ -108,9 +99,6 @@ const getPropertyDetails = async (req, res) => {
     }
 };
 
-// @desc    Verify/Approve a property
-// @route   PUT /api/admin/properties/:id/verify
-// @access  Private/Admin
 const verifyProperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id).populate('owner', 'fullName email');
@@ -135,7 +123,6 @@ const verifyProperty = async (req, res) => {
         
         await property.save();
 
-        // Generate PDF report
         let pdfBuffer;
         try {
             pdfBuffer = await generatePropertyReport(property);
@@ -143,7 +130,6 @@ const verifyProperty = async (req, res) => {
             console.error('Failed to generate PDF:', pdfErr);
         }
 
-        // Send approval email with PDF attachment
         if (property.owner && property.owner.email) {
             try {
                 const mailOptions = {
@@ -188,9 +174,6 @@ const verifyProperty = async (req, res) => {
     }
 };
 
-// @desc    Reject a property
-// @route   PUT /api/admin/properties/:id/reject
-// @access  Private/Admin
 const rejectProperty = async (req, res) => {
     try {
         const { reason } = req.body;
@@ -211,7 +194,6 @@ const rejectProperty = async (req, res) => {
         
         await property.save();
 
-        // Send rejection email to seller
         if (property.owner && property.owner.email) {
             try {
                 await transporter.sendMail({
@@ -244,24 +226,19 @@ const rejectProperty = async (req, res) => {
     }
 };
 
-// ----------------------------------------
-// Analytics function
-// ----------------------------------------
 const getAdminAnalytics = async (req, res) => {
     try {
-        // 1. Property counts by status
+        
         const statusCounts = await Property.aggregate([
             { $group: { _id: '$status', count: { $sum: 1 } } }
         ]);
         const statusData = {};
         statusCounts.forEach(item => { statusData[item._id] = item.count; });
 
-        // 2. Properties by type
         const typeCounts = await Property.aggregate([
             { $group: { _id: '$propertyType', count: { $sum: 1 } } }
         ]);
 
-        // 3. Monthly listings (last 6 months)
         const sixMonthsAgo = moment().subtract(6, 'months').startOf('month').toDate();
         const monthlyListings = await Property.aggregate([
             { $match: { createdAt: { $gte: sixMonthsAgo } } },
@@ -274,14 +251,12 @@ const getAdminAnalytics = async (req, res) => {
             { $sort: { _id: 1 } }
         ]);
 
-        // 4. Top cities
         const topCities = await Property.aggregate([
             { $group: { _id: '$address.city', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
             { $limit: 10 }
         ]);
 
-        // 5. Price distribution
         const priceRanges = [
             { label: 'Under ₹25L', min: 0, max: 2500000 },
             { label: '₹25L - ₹50L', min: 2500000, max: 5000000 },
@@ -298,7 +273,6 @@ const getAdminAnalytics = async (req, res) => {
             })
         );
 
-        // 6. Average price and area
         const avgStats = await Property.aggregate([
             {
                 $group: {
@@ -311,7 +285,6 @@ const getAdminAnalytics = async (req, res) => {
         const avgPrice = avgStats[0]?.avgPrice || 0;
         const avgArea = avgStats[0]?.avgArea || 0;
 
-        // 7. Recent verification activity
         const recentActivity = await Property.find({ status: { $in: ['Active', 'Rejected'] } })
             .sort({ updatedAt: -1 })
             .limit(10)
@@ -340,14 +313,11 @@ const getAdminAnalytics = async (req, res) => {
     }
 };
 
-// ----------------------------------------
-// Export all functions
-// ----------------------------------------
 module.exports = {
     getDashboardStats,
     getAllProperties,
     getPropertyDetails,
     verifyProperty,
     rejectProperty,
-    getAdminAnalytics  // <-- make sure this is exported
+    getAdminAnalytics  
 };

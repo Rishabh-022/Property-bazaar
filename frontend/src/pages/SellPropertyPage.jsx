@@ -43,17 +43,14 @@ const SellPropertyPage = () => {
     });
   };
 
-  // ✅ FIXED: Append new files instead of replacing
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     
-    // Append to existing array, cap at 10 total
     setImageFiles(prev => {
       const combined = [...prev, ...files];
       return combined.slice(0, 10);
     });
     
-    // Generate previews only for the newly added files
     const newPreviews = files.map(file => URL.createObjectURL(file));
     setImagePreviews(prev => [...prev, ...newPreviews].slice(0, 10));
   };
@@ -103,7 +100,6 @@ const SellPropertyPage = () => {
         submitData.append(key, formData[key]);
       });
 
-      // Append image files
       imageFiles.forEach((file) => {
         submitData.append('images', file);
       });
@@ -122,7 +118,6 @@ const SellPropertyPage = () => {
       console.log('Property Listed:', response.data);
       alert('✅ Property listed successfully! It will appear after approval.');
       
-      // Reset form
       setFormData({
         sellerName: user?.fullName || '',
         sellerPhone: user?.phone || '',
@@ -165,7 +160,7 @@ const SellPropertyPage = () => {
     }}>
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         
-        {/* Header */}
+        {}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -182,7 +177,7 @@ const SellPropertyPage = () => {
           </p>
         </motion.div>
 
-        {/* Progress Bar */}
+        {}
         <div className="mb-10">
           <div className="flex justify-between mb-4">
             {['Seller Details', 'Property Info', 'Location & Price'].map((label, i) => (
@@ -212,7 +207,7 @@ const SellPropertyPage = () => {
           </div>
         </div>
 
-        {/* Form */}
+        {}
         <motion.div
           key={step}
           initial={{ opacity: 0, x: 50 }}
@@ -221,7 +216,7 @@ const SellPropertyPage = () => {
           className="bg-white rounded-2xl shadow-xl p-8"
         >
           <form onSubmit={handleSubmit}>
-            {/* Step 1: Seller Details */}
+            {}
             {step === 1 && (
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-blue-950 mb-6">Step 1: Seller Details</h3>
@@ -248,7 +243,7 @@ const SellPropertyPage = () => {
               </div>
             )}
 
-            {/* Step 2: Property Details */}
+            {}
             {step === 2 && (
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-blue-950 mb-6">Step 2: Property Information</h3>
@@ -348,7 +343,7 @@ const SellPropertyPage = () => {
               </div>
             )}
 
-            {/* Step 3: Location, Price & Images */}
+            {}
             {step === 3 && (
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-blue-950 mb-6">Step 3: Location, Price & Images</h3>
@@ -411,7 +406,7 @@ const SellPropertyPage = () => {
                   <span className="text-sm text-gray-700">Price is negotiable</span>
                 </label>
 
-                {/* IMAGE UPLOAD - MULTIPLE FILES */}
+                {}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Property Images * ({imageFiles.length}/10 selected)
@@ -432,7 +427,7 @@ const SellPropertyPage = () => {
                     <p className="text-xs text-gray-400 mt-1">JPG, PNG, WebP up to 5MB each (max 10)</p>
                   </div>
 
-                  {/* Image Previews */}
+                  {}
                   {imagePreviews.length > 0 && (
                     <div className="grid grid-cols-3 gap-3 mt-4">
                       {imagePreviews.map((preview, index) => (
@@ -454,7 +449,7 @@ const SellPropertyPage = () => {
               </div>
             )}
 
-            {/* Navigation Buttons */}
+            {}
             <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
               {step > 1 ? (
                 <button type="button" onClick={prevStep}

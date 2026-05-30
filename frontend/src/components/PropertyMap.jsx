@@ -11,7 +11,6 @@ const PropertyMap = ({ address }) => {
   const [center, setCenter] = useState(null);
   const [error, setError] = useState('');
 
-  // Combine address fields into a single string
   const fullAddress = `${address?.street || ''}, ${address?.locality || ''}, ${address?.city || ''}, ${address?.state || ''}, ${address?.pincode || ''}`;
 
   useEffect(() => {

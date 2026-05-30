@@ -1,7 +1,6 @@
 const multer = require('multer');
 const path = require('path');
 
-// Configure multer for temporary local storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -12,7 +11,6 @@ const storage = multer.diskStorage({
     }
 });
 
-// File filter - only allow images
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -25,7 +23,6 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-// Upload configuration
 const upload = multer({
     storage: storage,
     limits: {

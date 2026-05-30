@@ -154,7 +154,7 @@ const ChatPage = () => {
       <div className="max-w-6xl mx-auto px-4 h-[calc(100vh-80px)]">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden h-full flex">
           
-          {/* Conversations List */}
+          {}
           <div className="w-80 border-r border-gray-200 dark:border-gray-700 flex flex-col">
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-xl font-bold text-blue-950 dark:text-blue-200">{t('chat.messages')}</h2>
@@ -193,7 +193,7 @@ const ChatPage = () => {
             </div>
           </div>
 
-          {/* Chat Area */}
+          {}
           <div className="flex-1 flex flex-col">
             {activeChat ? (
               <>

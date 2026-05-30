@@ -6,11 +6,10 @@ const {
     getPropertyDetails,
     verifyProperty,
     rejectProperty,
-    getAdminAnalytics   // <-- imported
+    getAdminAnalytics  
 } = require('../controllers/adminController');
 const { protect, admin } = require('../middleware/auth');
 
-// All routes are protected and admin-only
 router.use(protect);
 router.use(admin);
 

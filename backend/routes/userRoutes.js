@@ -10,13 +10,11 @@ const {
 } = require('../controllers/userController');
 const { protect } = require('../middleware/auth');
 
-// Public routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.post('/verify-otp', verifyOTP);      // <-- new
-router.post('/resend-otp', resendOTP);      // <-- new
+router.post('/verify-otp', verifyOTP);  
+router.post('/resend-otp', resendOTP);      
 
-// Private routes (require authentication)
 router.get('/profile', protect, getUserProfile);
 router.put('/profile', protect, updateUserProfile);
 

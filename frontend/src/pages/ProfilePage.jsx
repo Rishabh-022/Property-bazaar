@@ -143,7 +143,7 @@ const ProfilePage = () => {
           <p className="text-gray-500 dark:text-gray-400 mt-2">{t('profile.manageAccount')}</p>
         </motion.div>
 
-        {/* Tabs */}
+        {}
         <div className="flex flex-wrap gap-2 mb-8 bg-white dark:bg-gray-800 rounded-2xl p-2 shadow-lg">
           <button onClick={() => setActiveTab('profile')}
             className={`px-6 py-3 rounded-xl font-medium transition-all ${
@@ -171,7 +171,7 @@ const ProfilePage = () => {
           </button>
         </div>
 
-        {/* Profile Tab */}
+        {}
         {activeTab === 'profile' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-2xl">
@@ -272,7 +272,7 @@ const ProfilePage = () => {
           </motion.div>
         )}
 
-        {/* My Listings Tab */}
+        {}
         {activeTab === 'listings' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             {loading ? (
@@ -331,7 +331,7 @@ const ProfilePage = () => {
           </motion.div>
         )}
 
-        {/* Saved Favorites Tab */}
+        {}
         {activeTab === 'favorites' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             {loading ? (

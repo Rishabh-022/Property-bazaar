@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
         match: [/^\d{12}$/, 'Please enter a valid 12-digit Aadhaar number']
     },
-    // NEW: Saved/Favorite properties
+
     savedProperties: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Property'
@@ -58,7 +58,6 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Hash password before saving (Modern async syntax)
 userSchema.pre('save', async function() {
     if (!this.isModified('password')) {
         return; 
@@ -67,12 +66,10 @@ userSchema.pre('save', async function() {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Method to compare password
 userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Return user without sensitive data when sending JSON responses
 userSchema.methods.toJSON = function() {
     const user = this.toObject();
     delete user.password;

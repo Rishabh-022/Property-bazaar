@@ -9,15 +9,13 @@ const createAdmin = async () => {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB');
 
-        // Delete existing admin if any
         await User.deleteMany({ role: 'admin' });
         console.log('Removed old admin accounts');
 
-        // Create new admin
         const admin = await User.create({
             fullName: 'Admin User',
             email: 'admin@propertybazzar.com',
-            phone: '9999999999',  // Different phone number
+            phone: '9999999999',  
             password: 'Admin@123',
             role: 'admin',
             isVerified: true

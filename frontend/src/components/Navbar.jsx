@@ -56,7 +56,7 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Menu */}
+          {}
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/" className={`font-medium transition-colors ${scrolled ? 'text-gray-700 dark:text-gray-200 hover:text-blue-600' : 'text-blue-900 dark:text-blue-100 hover:text-blue-700'}`}>
               {t('nav.home')}
@@ -71,7 +71,7 @@ const Navbar = () => {
                   {t('nav.sell')}
                 </Link>
 
-                {/* Messages Link with Notification Badge */}
+                {}
                 <Link to="/chat" className={`relative font-medium transition-colors ${scrolled ? 'text-gray-700 dark:text-gray-200 hover:text-blue-600' : 'text-blue-900 dark:text-blue-100 hover:text-blue-700'}`}>
                   💬 {t('nav.messages')}
                   {notifications?.length > 0 && (
@@ -81,7 +81,7 @@ const Navbar = () => {
                   )}
                 </Link>
 
-                {/* Admin Dashboard Link */}
+                {}
                 {user.role === 'admin' && (
                   <Link to="/admin" className="text-purple-600 dark:text-purple-300 hover:text-purple-800 font-bold bg-purple-50 dark:bg-purple-900/50 px-4 py-2 rounded-lg transition-all hover:bg-purple-100 dark:hover:bg-purple-900">
                     ⚡ {t('nav.admin')}
@@ -145,7 +145,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {}
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-blue-900 dark:text-blue-100 p-2">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isOpen ? (
@@ -158,7 +158,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -198,7 +198,7 @@ const Navbar = () => {
                     </Link>
                   )}
 
-                  {/* Mobile theme toggle */}
+                  {}
                   <button
                     onClick={toggleTheme}
                     className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 rounded-xl flex items-center gap-2"
@@ -206,7 +206,7 @@ const Navbar = () => {
                     {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
                   </button>
 
-                  {/* Mobile language switcher */}
+                  {}
                   <select
                     value={i18n.language}
                     onChange={(e) => changeLanguage(e.target.value)}

@@ -4,7 +4,7 @@ import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
-import VerifyOtpPage from './pages/VerifyOtpPage'   // <-- NEW
+import VerifyOtpPage from './pages/VerifyOtpPage'  
 import ProtectedRoute from './components/ProtectedRoute'
 import BuyPropertyPage from './pages/BuyPropertyPage'
 import SellPropertyPage from './pages/SellPropertyPage'
@@ -19,16 +19,16 @@ function App() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
       <Navbar />
       <Routes>
-        {/* Public Routes */}
+        {}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/verify-otp" element={<VerifyOtpPage />} />   {/* <-- NEW */}
+        <Route path="/verify-otp" element={<VerifyOtpPage />} />   {}
         
-        {/* Property Detail - Public (anyone can view) */}
+        {}
         <Route path="/property/:id" element={<PropertyDetailPage />} />
 
-        {/* Protected Routes - Require Login */}
+        {}
         <Route 
           path="/properties" 
           element={
@@ -46,7 +46,7 @@ function App() {
           } 
         />
         
-        {/* Profile Route */}
+        {}
         <Route 
           path="/profile" 
           element={
@@ -56,7 +56,7 @@ function App() {
           } 
         />
 
-        {/* Chat Route */}
+        {}
         <Route 
           path="/chat" 
           element={
@@ -66,7 +66,7 @@ function App() {
           } 
         />
         
-        {/* Admin Route */}
+        {}
         <Route 
           path="/admin" 
           element={

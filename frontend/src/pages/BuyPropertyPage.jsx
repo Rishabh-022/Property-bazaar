@@ -77,7 +77,7 @@ const BuyPropertyPage = () => {
           </p>
         </motion.div>
 
-        {/* Search & Filters */}
+        {}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 mb-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -120,14 +120,14 @@ const BuyPropertyPage = () => {
           </div>
         </motion.div>
 
-        {/* Loading State */}
+        {}
         {loading && (
           <div className="flex justify-center py-20">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400"></div>
           </div>
         )}
 
-        {/* Error State */}
+        {}
         {error && (
           <div className="text-center py-20">
             <p className="text-red-500 dark:text-red-400 text-lg">{error}</p>
@@ -135,7 +135,7 @@ const BuyPropertyPage = () => {
           </div>
         )}
 
-        {/* Property Cards */}
+        {}
         {!loading && !error && (
           <>
             {properties.length === 0 ? (

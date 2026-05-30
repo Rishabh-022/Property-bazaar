@@ -26,10 +26,8 @@ const reviewSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Prevent duplicate reviews (one per user per property)
 reviewSchema.index({ property: 1, user: 1 }, { unique: true });
 
-// Static method to calculate average rating
 reviewSchema.statics.calcAverageRating = async function(propertyId) {
     const stats = await this.aggregate([
         { $match: { property: propertyId } },
@@ -54,12 +52,10 @@ reviewSchema.statics.calcAverageRating = async function(propertyId) {
     }
 };
 
-// After saving a review, recalculate average
 reviewSchema.post('save', function() {
     this.constructor.calcAverageRating(this.property);
 });
 
-// After deleting a review, recalculate average
 reviewSchema.post('remove', function() {
     this.constructor.calcAverageRating(this.property);
 });

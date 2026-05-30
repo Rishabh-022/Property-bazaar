@@ -2,12 +2,9 @@ const Property = require('../models/Property');
 const cloudinary = require('../config/cloudinary');
 const fs = require('fs');
 
-// @desc    Create a new property listing
-// @route   POST /api/properties
-// @access  Private
 const createProperty = async (req, res) => {
     try {
-        // 1. Check email verification first
+     
         if (!req.user.isVerified) {
             return res.status(403).json({
                 success: false,
@@ -43,7 +40,6 @@ const createProperty = async (req, res) => {
             priceNegotiable
         } = req.body;
 
-        // Validate required fields
         if (!sellerName || !aadhaarNumber || !registrationNumber || !khataNumber || 
             !propertyType || !title || !description || !area || !street || 
             !locality || !city || !state || !pincode || !expectedPrice) {
@@ -53,7 +49,6 @@ const createProperty = async (req, res) => {
             });
         }
 
-        // Upload images to Cloudinary
         const images = [];
         if (req.files && req.files.length > 0) {
             for (let i = 0; i < req.files.length; i++) {
@@ -68,14 +63,12 @@ const createProperty = async (req, res) => {
                 images.push({
                     url: result.secure_url,
                     publicId: result.public_id,
-                    isPrimary: i === 0   // first image is primary
+                    isPrimary: i === 0   
                 });
-                // Delete local file after upload
                 fs.unlinkSync(file.path);
             }
         }
 
-        // Create property
         const property = await Property.create({
             owner: req.user._id,
             sellerName,
@@ -121,7 +114,6 @@ const createProperty = async (req, res) => {
 
     } catch (error) {
         console.error('Create Property Error:', error);
-        // Clean up uploaded files if error
         if (req.files) {
             req.files.forEach(file => {
                 if (fs.existsSync(file.path)) {
@@ -140,9 +132,6 @@ const createProperty = async (req, res) => {
     }
 };
 
-// @desc    Get all properties (with filters)
-// @route   GET /api/properties
-// @access  Public
 const getProperties = async (req, res) => {
     try {
         const { city, state, propertyType, minPrice, maxPrice, status, sort, page = 1, limit = 10 } = req.query;
@@ -191,9 +180,7 @@ const getProperties = async (req, res) => {
     }
 };
 
-// @desc    Get single property by ID
-// @route   GET /api/properties/:id
-// @access  Public
+
 const getPropertyById = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id)
@@ -214,9 +201,6 @@ const getPropertyById = async (req, res) => {
     }
 };
 
-// @desc    Get logged in user's properties
-// @route   GET /api/properties/my-listings
-// @access  Private
 const getMyProperties = async (req, res) => {
     try {
         const properties = await Property.find({ owner: req.user._id })
@@ -228,9 +212,6 @@ const getMyProperties = async (req, res) => {
     }
 };
 
-// @desc    Update property listing
-// @route   PUT /api/properties/:id
-// @access  Private
 const updateProperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id);
@@ -266,9 +247,6 @@ const updateProperty = async (req, res) => {
     }
 };
 
-// @desc    Delete property listing
-// @route   DELETE /api/properties/:id
-// @access  Private
 const deleteProperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id);
@@ -291,9 +269,6 @@ const deleteProperty = async (req, res) => {
     }
 };
 
-// @desc    Upload additional images to property
-// @route   POST /api/properties/:id/images
-// @access  Private
 const uploadPropertyImages = async (req, res) => {
     try {
         // Check email verification

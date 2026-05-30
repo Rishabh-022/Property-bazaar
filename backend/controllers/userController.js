@@ -3,14 +3,10 @@ const generateToken = require('../utils/generateToken');
 const otpEmailTemplate = require('../utils/otpEmail');
 const transporter = require('../config/email');
 
-// @desc    Register a new user (sends OTP, no token)
-// @route   POST /api/users/register
-// @access  Public
 const registerUser = async (req, res) => {
     try {
         const { fullName, email, phone, password, confirmPassword } = req.body;
 
-        // Validation
         if (!fullName || !email || !phone || !password || !confirmPassword) {
             return res.status(400).json({ success: false, message: 'Please fill in all fields' });
         }
@@ -21,17 +17,14 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
         }
 
-        // Check if user already exists
         const userExists = await User.findOne({ $or: [{ email }, { phone }] });
         if (userExists) {
             return res.status(400).json({ success: false, message: 'Email or phone already registered' });
         }
 
-        // Generate OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); 
 
-        // Create user (unverified)
         const user = await User.create({
             fullName,
             email,
@@ -42,7 +35,6 @@ const registerUser = async (req, res) => {
             otpExpiry
         });
 
-        // Send OTP email
         try {
             await transporter.sendMail({
                 from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
@@ -53,13 +45,13 @@ const registerUser = async (req, res) => {
             console.log('OTP sent to:', email);
         } catch (emailErr) {
             console.error('Failed to send OTP:', emailErr);
-            // Don't fail registration if email fails, but log it
+        
         }
 
         res.status(201).json({
             success: true,
             message: 'Registration successful! Please check your email for the OTP to verify your account.',
-            email: user.email   // so frontend can redirect to OTP page
+            email: user.email   
         });
     } catch (error) {
         console.error('Register Error:', error);
@@ -75,9 +67,6 @@ const registerUser = async (req, res) => {
     }
 };
 
-// @desc    Verify email OTP
-// @route   POST /api/users/verify-otp
-// @access  Public
 const verifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
@@ -105,9 +94,6 @@ const verifyOTP = async (req, res) => {
     }
 };
 
-// @desc    Resend OTP
-// @route   POST /api/users/resend-otp
-// @access  Public
 const resendOTP = async (req, res) => {
     try {
         const { email } = req.body;
@@ -120,13 +106,11 @@ const resendOTP = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Email already verified' });
         }
 
-        // Generate new OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         user.otp = otp;
         user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
         await user.save();
 
-        // Send OTP email
         await transporter.sendMail({
             from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
             to: email,
@@ -141,9 +125,6 @@ const resendOTP = async (req, res) => {
     }
 };
 
-// @desc    Login user (now checks email verified)
-// @route   POST /api/users/login
-// @access  Public
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -158,7 +139,6 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ success: false, message: 'Invalid email or password' });
         }
 
-        // Block unverified users
         if (!user.isVerified) {
             return res.status(403).json({ success: false, message: 'Please verify your email first. Check your inbox for OTP.' });
         }
@@ -190,9 +170,6 @@ const loginUser = async (req, res) => {
     }
 };
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
 const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
@@ -220,9 +197,6 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
 const updateUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);

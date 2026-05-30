@@ -14,7 +14,6 @@ const generatePropertyReport = (property) => {
       doc.on('end', () => resolve(Buffer.concat(buffers)));
       doc.on('error', reject);
 
-      // ---------- Header ----------
       doc
         .fillColor('#1e3a8a')
         .fontSize(26)
@@ -26,7 +25,6 @@ const generatePropertyReport = (property) => {
         .text('Verified Property Report', { align: 'center' })
         .moveDown(0.5);
 
-      // Horizontal line
       doc
         .strokeColor('#3b82f6')
         .lineWidth(2)
@@ -35,7 +33,6 @@ const generatePropertyReport = (property) => {
         .stroke()
         .moveDown(1);
 
-      // ---------- Property Title & ID ----------
       doc
         .fontSize(18)
         .fillColor('#0f172a')
@@ -47,7 +44,6 @@ const generatePropertyReport = (property) => {
         .text(`Registration Number: ${property.registrationNumber}`)
         .moveDown(0.5);
 
-      // ---------- Verification Info ----------
       doc
         .fontSize(12)
         .fillColor('#1e3a8a')
@@ -67,7 +63,6 @@ const generatePropertyReport = (property) => {
         .text(`Verified on: ${verifiedAt}`)
         .moveDown(0.5);
 
-      // ---------- Property Details ----------
       doc
         .fontSize(12)
         .fillColor('#1e3a8a')
@@ -104,7 +99,6 @@ const generatePropertyReport = (property) => {
 
       doc.moveDown(0.5);
 
-      // ---------- Legal Notice ----------
       doc
         .fontSize(9)
         .fillColor('#64748b')
@@ -117,7 +111,6 @@ const generatePropertyReport = (property) => {
         )
         .moveDown(0.5);
 
-      // ---------- Footer ----------
       doc
         .strokeColor('#cbd5e1')
         .lineWidth(1)

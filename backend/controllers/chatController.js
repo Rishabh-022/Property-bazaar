@@ -2,21 +2,17 @@ const Message = require('../models/Message');
 const Conversation = require('../models/Conversation');
 const Property = require('../models/Property');
 
-// @desc    Start a conversation or get existing one
-// @route   POST /api/chat/conversations
-// @access  Private
 const startConversation = async (req, res) => {
     try {
         const { propertyId, receiverId } = req.body;
         const senderId = req.user._id;
 
-        // ✅ FIX: populate even existing conversation
         let conversation = await Conversation.findOne({
             propertyId,
             participants: { $all: [senderId, receiverId] }
         })
         .populate('participants', 'fullName email')
-        .populate('propertyId', 'title images'); // <-- ADD THIS LINE
+        .populate('propertyId', 'title images'); 
 
         if (conversation) {
             return res.json({
@@ -26,14 +22,13 @@ const startConversation = async (req, res) => {
             });
         }
 
-        // Create new conversation (already populates below)
         conversation = await Conversation.create({
             propertyId,
             participants: [senderId, receiverId]
         });
 
         await conversation.populate('participants', 'fullName email');
-        await conversation.populate('propertyId', 'title images'); // <-- ensure new also populated
+        await conversation.populate('propertyId', 'title images'); 
 
         res.status(201).json({
             success: true,
@@ -49,9 +44,6 @@ const startConversation = async (req, res) => {
     }
 };
 
-// @desc    Get all conversations for a user
-// @route   GET /api/chat/conversations
-// @access  Private
 const getConversations = async (req, res) => {
     try {
         const conversations = await Conversation.find({
@@ -74,9 +66,6 @@ const getConversations = async (req, res) => {
     }
 };
 
-// @desc    Get messages for a conversation
-// @route   GET /api/chat/conversations/:id/messages
-// @access  Private
 const getMessages = async (req, res) => {
     try {
         const messages = await Message.find({
@@ -103,9 +92,6 @@ const getMessages = async (req, res) => {
     }
 };
 
-// @desc    Send a message
-// @route   POST /api/chat/messages
-// @access  Private
 const sendMessage = async (req, res) => {
     try {
         const { conversationId, propertyId, receiverId, message } = req.body;
@@ -117,7 +103,7 @@ const sendMessage = async (req, res) => {
             message
         });
 
-        // Update conversation
+       
         await Conversation.findByIdAndUpdate(conversationId, {
             lastMessage: message.substring(0, 100),
             lastMessageAt: Date.now()

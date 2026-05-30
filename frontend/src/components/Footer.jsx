@@ -31,7 +31,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {}
           <div>
             <h4 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Quick Links</h4>
             <ul className="space-y-3">
@@ -42,7 +42,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {}
           <div>
             <h4 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Contact</h4>
             <ul className="space-y-3 text-gray-600 dark:text-gray-400">

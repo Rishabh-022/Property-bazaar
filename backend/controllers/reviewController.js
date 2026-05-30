@@ -1,21 +1,16 @@
 const Review = require('../models/Review');
 const Property = require('../models/Property');
 
-// @desc    Create a review
-// @route   POST /api/properties/:propertyId/reviews
-// @access  Private
 const createReview = async (req, res) => {
     try {
         const { rating, comment } = req.body;
         const propertyId = req.params.propertyId;
 
-        // Check if property exists
         const property = await Property.findById(propertyId);
         if (!property) {
             return res.status(404).json({ success: false, message: 'Property not found' });
         }
 
-        // Check if user already reviewed this property
         const existingReview = await Review.findOne({
             property: propertyId,
             user: req.user._id
@@ -43,9 +38,6 @@ const createReview = async (req, res) => {
     }
 };
 
-// @desc    Get reviews for a property
-// @route   GET /api/properties/:propertyId/reviews
-// @access  Public
 const getReviews = async (req, res) => {
     try {
         const reviews = await Review.find({ property: req.params.propertyId })
@@ -59,9 +51,6 @@ const getReviews = async (req, res) => {
     }
 };
 
-// @desc    Delete a review
-// @route   DELETE /api/reviews/:id
-// @access  Private (only review owner or admin)
 const deleteReview = async (req, res) => {
     try {
         const review = await Review.findById(req.params.id);
@@ -69,7 +58,6 @@ const deleteReview = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Review not found' });
         }
 
-        // Check ownership
         if (review.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({ success: false, message: 'Not authorized to delete this review' });
         }

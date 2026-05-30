@@ -47,7 +47,7 @@ const LoginPage = () => {
       background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%, #bfdbfe 60%, #93c5fd 100%)'
     }}>
       
-      {/* Left Side – Branding */}
+      {}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
         {[...Array(8)].map((_, i) => (
           <motion.div
@@ -126,7 +126,7 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Right Side – Login Form (full width on mobile, half on desktop) */}
+      {}
       <div className="flex-1 flex items-center justify-center p-8">
         <motion.div
           initial={{ opacity: 0, x: 50 }}
@@ -135,7 +135,7 @@ const LoginPage = () => {
           className="w-full max-w-md"
         >
           <div className="bg-white rounded-3xl shadow-2xl p-10">
-            {/* Mobile Logo – shown only below lg breakpoint */}
+            {}
             <div className="lg:hidden text-center mb-8">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-white font-bold text-2xl">PB</span>

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const nlp = require('compromise');
 
-// Knowledge base: list of possible intents and their replies
 const knowledge = [
   {
     patterns: ['register', 'sign up', 'create account', 'registration'],
@@ -30,9 +29,6 @@ const knowledge = [
   }
 ];
 
-// @desc    Answer a user query
-// @route   POST /api/chatbot
-// @access  Public (or Private if you prefer)
 router.post('/', (req, res) => {
   const { query } = req.body;
   if (!query) {
@@ -42,7 +38,6 @@ router.post('/', (req, res) => {
   const userQuery = query.toLowerCase().trim();
   const doc = nlp(userQuery);
 
-  // Attempt to match any intent
   for (let item of knowledge) {
     for (let pattern of item.patterns) {
       if (doc.has(pattern)) {
@@ -51,7 +46,6 @@ router.post('/', (req, res) => {
     }
   }
 
-  // Fallback
   res.json({ reply: 'I’m not sure about that. Please email support@propertybazzar.com or call +91 1800-123-4567 for help.' });
 });
 

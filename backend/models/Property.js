@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 
 const propertySchema = new mongoose.Schema({
-    // Owner/Seller Reference
+    
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'Property owner is required']
     },
     
-    // Seller Personal Details
     sellerName: {
         type: String,
         required: [true, 'Seller name is required'],
@@ -30,7 +29,6 @@ const propertySchema = new mongoose.Schema({
         trim: true
     },
 
-    // Property Classification
     propertyType: {
         type: String,
         enum: {
@@ -44,7 +42,6 @@ const propertySchema = new mongoose.Schema({
         enum: ['Apartment', 'Independent House', 'Villa', 'Farm House', 'Office Space', 'Shop', 'Warehouse', 'Agricultural Land', 'Residential Plot', 'Commercial Plot']
     },
     
-    // Legal & Registration Details
     registrationNumber: {
         type: String,
         required: [true, 'Property registration number is required'],
@@ -70,13 +67,11 @@ const propertySchema = new mongoose.Schema({
         trim: true
     },
     
-    // Ownership Details
     ownershipType: {
         type: String,
         enum: ['Freehold', 'Leasehold', 'Co-operative Society', 'Power of Attorney']
     },
     
-    // Property Details
     title: {
         type: String,
         required: [true, 'Property title is required'],
@@ -89,7 +84,6 @@ const propertySchema = new mongoose.Schema({
         maxlength: [5000, 'Description cannot exceed 5000 characters']
     },
     
-    // Dimensions
     dimensions: {
         area: {
             type: Number,
@@ -103,7 +97,6 @@ const propertySchema = new mongoose.Schema({
         }
     },
     
-    // Location
     address: {
         street: {
             type: String,
@@ -130,7 +123,6 @@ const propertySchema = new mongoose.Schema({
         }
     },
     
-    // Pricing
     pricing: {
         expectedPrice: {
             type: Number,
@@ -143,7 +135,6 @@ const propertySchema = new mongoose.Schema({
         }
     },
     
-    // Images
     images: [{
         url: {
             type: String,
@@ -160,14 +151,12 @@ const propertySchema = new mongoose.Schema({
         }
     }],
     
-    // Status
     status: {
         type: String,
         enum: ['Draft', 'Pending', 'Active', 'Rejected', 'Sold', 'Expired'],
         default: 'Pending'
     },
 
-    // Verification Fields
     verifiedAt: Date,
     verifiedBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -188,7 +177,6 @@ const propertySchema = new mongoose.Schema({
     default: 0
     },
     
-    // Views count
     views: {
         type: Number,
         default: 0
@@ -197,7 +185,6 @@ const propertySchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Indexes for search
 propertySchema.index({ 'address.city': 1, 'propertyType': 1 });
 propertySchema.index({ 'pricing.expectedPrice': 1 });
 propertySchema.index({ status: 1 });
