@@ -44,10 +44,10 @@ const VerifyOtpPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 w-full max-w-md">
-                <h1 className="text-2xl font-bold text-blue-950 dark:text-blue-200 mb-2">Verify Your Email</h1>
-                <p className="text-gray-500 dark:text-gray-400 mb-6">Enter the 6‑digit OTP sent to <strong>{email}</strong></p>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md">
+                <h1 className="text-2xl font-bold text-blue-950 mb-2">Verify Your Email</h1>
+                <p className="text-gray-500 mb-6">Enter the 6‑digit OTP sent to <strong>{email}</strong></p>
                 {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
                 {success && <p className="text-green-500 text-sm mb-3">{success}</p>}
                 <form onSubmit={handleVerify}>
@@ -57,7 +57,7 @@ const VerifyOtpPage = () => {
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         placeholder="000000"
-                        className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl text-center text-2xl tracking-widest bg-white dark:bg-gray-700 dark:text-white mb-4"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl text-center text-2xl tracking-widest bg-white text-gray-900 placeholder-gray-400 mb-4"
                     />
                     <button
                         type="submit"
@@ -67,7 +67,7 @@ const VerifyOtpPage = () => {
                         {loading ? 'Verifying...' : 'Verify OTP'}
                     </button>
                 </form>
-                <button onClick={handleResend} className="mt-4 text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                <button onClick={handleResend} className="mt-4 text-sm text-blue-600 hover:underline">
                     Resend OTP
                 </button>
             </motion.div>

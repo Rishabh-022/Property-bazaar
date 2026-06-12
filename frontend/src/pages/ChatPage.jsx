@@ -150,25 +150,24 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen pt-20 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 h-[calc(100vh-80px)]">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden h-full flex">
-          
-          {}
-          <div className="w-80 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-xl font-bold text-blue-950 dark:text-blue-200">{t('chat.messages')}</h2>
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden h-full flex">
+
+          {/* Conversations List */}
+          <div className="w-80 border-r border-gray-200 flex flex-col">
+            <div className="p-4 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-blue-950">{t('chat.messages')}</h2>
             </div>
             <div className="flex-1 overflow-y-auto">
               {conversations?.map((conv) => {
                 const otherUser = conv?.participants?.find((p) => p?._id !== user?._id);
-                
                 return (
                   <div
                     key={conv._id}
                     onClick={() => fetchMessages(conv)}
-                    className={`p-4 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-700 transition-all border-b border-gray-100 dark:border-gray-700 ${
-                      activeChat?._id === conv._id ? 'bg-blue-50 dark:bg-gray-700 border-l-4 border-l-blue-600' : ''
+                    className={`p-4 cursor-pointer hover:bg-blue-50 transition-all border-b border-gray-100 ${
+                      activeChat?._id === conv._id ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -176,10 +175,10 @@ const ChatPage = () => {
                         {otherUser?.fullName?.charAt(0) || 'U'}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-gray-800 dark:text-gray-200 truncate">
+                        <div className="font-semibold text-gray-800 truncate">
                           {otherUser?.fullName || t('chat.unknown')}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        <div className="text-xs text-gray-500 truncate">
                           {conv?.lastMessage || t('chat.noMessages')}
                         </div>
                       </div>
@@ -188,16 +187,16 @@ const ChatPage = () => {
                 );
               })}
               {(!conversations || conversations.length === 0) && (
-                <div className="text-center text-gray-500 dark:text-gray-400 p-8">{t('chat.noConversations')}</div>
+                <div className="text-center text-gray-500 p-8">{t('chat.noConversations')}</div>
               )}
             </div>
           </div>
 
-          {}
+          {/* Chat Area */}
           <div className="flex-1 flex flex-col">
             {activeChat ? (
               <>
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
+                <div className="p-4 border-b border-gray-200 flex items-center gap-3">
                   {(() => {
                     const otherUser = activeChat?.participants?.find((p) => p?._id !== user?._id);
                     return (
@@ -206,10 +205,10 @@ const ChatPage = () => {
                           {otherUser?.fullName?.charAt(0) || 'U'}
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-800 dark:text-gray-200">
+                          <div className="font-semibold text-gray-800">
                             {otherUser?.fullName || t('chat.unknown')}
                           </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                          <div className="text-xs text-gray-500">
                             {activeChat?.propertyId?.title || t('chat.property')}
                           </div>
                         </div>
@@ -232,7 +231,7 @@ const ChatPage = () => {
                         className={`max-w-[70%] px-4 py-2 rounded-2xl ${
                           msg?.sender?._id === user?._id || msg?.sender === user?._id
                             ? 'bg-blue-600 text-white rounded-br-md'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md'
+                            : 'bg-gray-100 text-gray-800 rounded-bl-md'
                         }`}
                       >
                         <p className="text-sm">{msg?.message}</p>
@@ -245,11 +244,11 @@ const ChatPage = () => {
                       </div>
                     </div>
                   ))}
-                  {typing && <div className="text-sm text-gray-400 dark:text-gray-500 italic">{t('chat.typing')}</div>}
+                  {typing && <div className="text-sm text-gray-400 italic">{t('chat.typing')}</div>}
                   <div ref={messagesEndRef} />
                 </div>
 
-                <form onSubmit={handleSend} className="p-4 border-t border-gray-200 dark:border-gray-700">
+                <form onSubmit={handleSend} className="p-4 border-t border-gray-200">
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -257,7 +256,7 @@ const ChatPage = () => {
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={handleTyping}
                       placeholder={t('chat.typeMessage')}
-                      className="flex-1 px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                      className="flex-1 px-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-900 placeholder-gray-400"
                     />
                     <button
                       type="submit"
@@ -269,7 +268,7 @@ const ChatPage = () => {
                 </form>
               </>
             ) : (
-              <div className="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500">
+              <div className="flex-1 flex items-center justify-center text-gray-400">
                 <div className="text-center">
                   <span className="text-6xl mb-4 block">💬</span>
                   <p className="text-lg">{t('chat.selectChat')}</p>

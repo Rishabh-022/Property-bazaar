@@ -24,6 +24,12 @@ const SellPropertyPage = () => {
     description: '',
     area: '',
     areaUnit: 'sqft',
+    // ---- NEW FIELDS ----
+    bedrooms: '',
+    bathrooms: '',
+    furnishing: '',
+    possessionStatus: '',
+    // ---- END NEW FIELDS ----
     street: '',
     landmark: '',
     locality: '',
@@ -132,6 +138,12 @@ const SellPropertyPage = () => {
         description: '',
         area: '',
         areaUnit: 'sqft',
+        // ---- NEW FIELDS ----
+        bedrooms: '',
+        bathrooms: '',
+        furnishing: '',
+        possessionStatus: '',
+        // ---- END NEW FIELDS ----
         street: '',
         landmark: '',
         locality: '',
@@ -155,12 +167,10 @@ const SellPropertyPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16" style={{
-      background: 'linear-gradient(180deg, #eff6ff 0%, #ffffff 100%)'
-    }}>
+    <div className="min-h-screen pt-24 pb-16 bg-gray-50">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         
-        {}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -177,7 +187,7 @@ const SellPropertyPage = () => {
           </p>
         </motion.div>
 
-        {}
+        {/* Progress Bar */}
         <div className="mb-10">
           <div className="flex justify-between mb-4">
             {['Seller Details', 'Property Info', 'Location & Price'].map((label, i) => (
@@ -199,7 +209,7 @@ const SellPropertyPage = () => {
           </div>
           <div className="h-2 bg-gray-200 rounded-full">
             <motion.div
-              className="h-full bg-gradient-to-r from-blue-600 to-blue-700 rounded-full"
+              className="h-full bg-blue-600 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${(step / 3) * 100}%` }}
               transition={{ duration: 0.5 }}
@@ -207,7 +217,7 @@ const SellPropertyPage = () => {
           </div>
         </div>
 
-        {}
+        {/* Form */}
         <motion.div
           key={step}
           initial={{ opacity: 0, x: 50 }}
@@ -216,7 +226,7 @@ const SellPropertyPage = () => {
           className="bg-white rounded-2xl shadow-xl p-8"
         >
           <form onSubmit={handleSubmit}>
-            {}
+            {/* Step 1: Seller Details */}
             {step === 1 && (
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-blue-950 mb-6">Step 1: Seller Details</h3>
@@ -224,26 +234,26 @@ const SellPropertyPage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                   <input type="text" name="sellerName" value={formData.sellerName} onChange={handleChange} required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
                   <input type="tel" name="sellerPhone" value={formData.sellerPhone} onChange={handleChange} required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Aadhaar Number *</label>
                   <input type="text" name="aadhaarNumber" value={formData.aadhaarNumber} onChange={handleChange} required
                     placeholder="12-digit Aadhaar number" maxLength={12}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   <p className="text-xs text-gray-400 mt-1">🔒 Your Aadhaar is encrypted and secure</p>
                 </div>
               </div>
             )}
 
-            {}
+            {/* Step 2: Property Details */}
             {step === 2 && (
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-blue-950 mb-6">Step 2: Property Information</h3>
@@ -252,7 +262,7 @@ const SellPropertyPage = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Property Type *</label>
                     <select name="propertyType" value={formData.propertyType} onChange={handleChange} required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none">
                       <option value="">Select Type</option>
                       <option value="Residential">Residential</option>
                       <option value="Commercial">Commercial</option>
@@ -265,7 +275,7 @@ const SellPropertyPage = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Sub Type</label>
                     <select name="propertySubType" value={formData.propertySubType} onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none">
                       <option value="">Select Sub Type</option>
                       <option value="Apartment">Apartment</option>
                       <option value="Independent House">Independent House</option>
@@ -285,26 +295,26 @@ const SellPropertyPage = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Property Title *</label>
                   <input type="text" name="title" value={formData.title} onChange={handleChange} required
                     placeholder="e.g., Beautiful 3BHK Apartment in Prime Location"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
                   <textarea name="description" value={formData.description} onChange={handleChange} required rows={4}
                     placeholder="Describe your property in detail..."
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Area *</label>
                     <input type="number" name="area" value={formData.area} onChange={handleChange} required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Area Unit</label>
                     <select name="areaUnit" value={formData.areaUnit} onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none">
                       <option value="sqft">Square Feet (sqft)</option>
                       <option value="sqm">Square Meter (sqm)</option>
                       <option value="sqyd">Square Yard (sqyd)</option>
@@ -315,35 +325,71 @@ const SellPropertyPage = () => {
                   </div>
                 </div>
 
+                {/* ---- NEW FIELDS SECTION ---- */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Bedrooms</label>
+                    <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Bathrooms</label>
+                    <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Furnishing</label>
+                    <select name="furnishing" value={formData.furnishing} onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none">
+                      <option value="">Select</option>
+                      <option value="Furnished">Furnished</option>
+                      <option value="Semi-Furnished">Semi-Furnished</option>
+                      <option value="Unfurnished">Unfurnished</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Possession Status</label>
+                    <select name="possessionStatus" value={formData.possessionStatus} onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none">
+                      <option value="">Select</option>
+                      <option value="Ready to Move">Ready to Move</option>
+                      <option value="Under Construction">Under Construction</option>
+                    </select>
+                  </div>
+                </div>
+                {/* ---- END NEW FIELDS ---- */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Registration Number *</label>
                   <input type="text" name="registrationNumber" value={formData.registrationNumber} onChange={handleChange} required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Khata Number *</label>
                     <input type="text" name="khataNumber" value={formData.khataNumber} onChange={handleChange} required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Khasra Number</label>
                     <input type="text" name="khasraNumber" value={formData.khasraNumber} onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Survey Number</label>
                   <input type="text" name="surveyNumber" value={formData.surveyNumber} onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
               </div>
             )}
 
-            {}
+            {/* Step 3: Location, Price & Images */}
             {step === 3 && (
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-blue-950 mb-6">Step 3: Location, Price & Images</h3>
@@ -351,26 +397,26 @@ const SellPropertyPage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
                   <input type="text" name="street" value={formData.street} onChange={handleChange} required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Landmark</label>
                   <input type="text" name="landmark" value={formData.landmark} onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Locality *</label>
                     <input type="text" name="locality" value={formData.locality} onChange={handleChange} required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
                     <input type="text" name="city" value={formData.city} onChange={handleChange} required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                 </div>
 
@@ -378,26 +424,26 @@ const SellPropertyPage = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">District</label>
                     <input type="text" name="district" value={formData.district} onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">State *</label>
                     <input type="text" name="state" value={formData.state} onChange={handleChange} required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Pincode *</label>
                   <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} required maxLength={6}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Expected Price (₹) *</label>
                   <input type="number" name="expectedPrice" value={formData.expectedPrice} onChange={handleChange} required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                 </div>
 
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -406,7 +452,7 @@ const SellPropertyPage = () => {
                   <span className="text-sm text-gray-700">Price is negotiable</span>
                 </label>
 
-                {}
+                {/* IMAGE UPLOAD */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Property Images * ({imageFiles.length}/10 selected)
@@ -427,7 +473,6 @@ const SellPropertyPage = () => {
                     <p className="text-xs text-gray-400 mt-1">JPG, PNG, WebP up to 5MB each (max 10)</p>
                   </div>
 
-                  {}
                   {imagePreviews.length > 0 && (
                     <div className="grid grid-cols-3 gap-3 mt-4">
                       {imagePreviews.map((preview, index) => (
@@ -449,7 +494,7 @@ const SellPropertyPage = () => {
               </div>
             )}
 
-            {}
+            {/* Navigation Buttons */}
             <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
               {step > 1 ? (
                 <button type="button" onClick={prevStep}
@@ -460,12 +505,12 @@ const SellPropertyPage = () => {
               
               {step < 3 ? (
                 <button type="button" onClick={nextStep}
-                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
+                  className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transition-all">
                   Next Step →
                 </button>
               ) : (
                 <button type="submit" disabled={loading}
-                  className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50">
+                  className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold shadow-lg transition-all disabled:opacity-50">
                   {loading ? 'Listing Property...' : '✅ Submit Listing'}
                 </button>
               )}

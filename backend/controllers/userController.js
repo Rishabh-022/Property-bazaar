@@ -17,9 +17,16 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
         }
 
-        const userExists = await User.findOne({ $or: [{ email }, { phone }] });
-        if (userExists) {
-            return res.status(400).json({ success: false, message: 'Email or phone already registered' });
+        // Check if an unverified user already exists with this email/phone
+        let existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+        if (existingUser) {
+            if (!existingUser.isVerified) {
+                // Delete the old unverified user so they can re-register
+                await User.deleteOne({ _id: existingUser._id });
+                console.log(`🗑️ Deleted old unverified account for ${email}`);
+            } else {
+                return res.status(400).json({ success: false, message: 'Email or phone already registered' });
+            }
         }
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -35,17 +42,24 @@ const registerUser = async (req, res) => {
             otpExpiry
         });
 
+        console.log(`👤 New user created: ${email} (${user._id}) with OTP: ${otp}`);
+
+        // Send OTP email
         try {
-            await transporter.sendMail({
+            const info = await transporter.sendMail({
                 from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
                 to: email,
                 subject: 'Verify your email - OTP',
                 html: otpEmailTemplate(fullName, otp)
             });
-            console.log('OTP sent to:', email);
+            console.log(`✅ OTP sent to: ${email}`);
+            console.log(`📨 Message ID: ${info.messageId}`);
         } catch (emailErr) {
-            console.error('Failed to send OTP:', emailErr);
-        
+            console.error('❌ Failed to send OTP:', emailErr);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Registration successful but failed to send OTP. Please try to resend OTP from the verification page.' 
+            });
         }
 
         res.status(201).json({
@@ -111,14 +125,20 @@ const resendOTP = async (req, res) => {
         user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
         await user.save();
 
-        await transporter.sendMail({
-            from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: 'Your new OTP for PropertyBazzar',
-            html: otpEmailTemplate(user.fullName, otp)
-        });
-
-        res.json({ success: true, message: 'OTP resent successfully' });
+        try {
+            const info = await transporter.sendMail({
+                from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: 'Your new OTP for PropertyBazzar',
+                html: otpEmailTemplate(user.fullName, otp)
+            });
+            console.log(`✅ OTP resent to: ${email}`);
+            console.log(`📨 Message ID: ${info.messageId}`);
+            res.json({ success: true, message: 'OTP resent successfully' });
+        } catch (emailErr) {
+            console.error('❌ Failed to resend OTP:', emailErr);
+            res.status(500).json({ success: false, message: 'Failed to send OTP. Please try again.' });
+        }
     } catch (error) {
         console.error('Resend OTP Error:', error);
         res.status(500).json({ success: false, message: 'Error resending OTP' });

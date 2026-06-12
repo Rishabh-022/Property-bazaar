@@ -43,16 +43,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row" style={{
-      background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%, #bfdbfe 60%, #93c5fd 100%)'
-    }}>
+    <div className="min-h-screen pt-24 flex flex-col lg:flex-row bg-blue-50">
       
-      {}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
+      {/* Left side – branding (only visible on lg screens) */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 bg-blue-600 relative overflow-hidden">
+        {/* decorative floating circles */}
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-white/40"
+            className="absolute rounded-full bg-white/20"
             style={{
               width: Math.random() * 200 + 100,
               height: Math.random() * 200 + 100,
@@ -73,16 +72,16 @@ const LoginPage = () => {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
-            className="w-24 h-24 bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl"
+            className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl"
           >
-            <span className="text-white font-bold text-4xl">PB</span>
+            <span className="text-blue-700 font-bold text-4xl">PB</span>
           </motion.div>
           
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-5xl font-bold font-display text-blue-950 mb-4"
+            className="text-5xl font-bold font-display text-white mb-4"
           >
             {t('login.welcomeBack')}
           </motion.h1>
@@ -91,7 +90,7 @@ const LoginPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-blue-800 text-lg"
+            className="text-blue-100 text-lg"
           >
             {t('login.signInAccess')}
           </motion.p>
@@ -99,13 +98,13 @@ const LoginPage = () => {
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 3, repeat: Infinity }}
-            className="mt-12 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl"
+            className="mt-12 bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-xl"
           >
             <div className="flex items-center gap-4">
               <span className="text-4xl">🏠</span>
               <div className="text-left">
-                <div className="text-blue-900 font-semibold">{t('login.statsProperties')}</div>
-                <div className="text-green-600 text-sm">{t('login.verifiedListings')}</div>
+                <div className="text-white font-semibold">{t('login.statsProperties')}</div>
+                <div className="text-blue-200 text-sm">{t('login.verifiedListings')}</div>
               </div>
             </div>
           </motion.div>
@@ -113,20 +112,20 @@ const LoginPage = () => {
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
-            className="mt-4 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl"
+            className="mt-4 bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-xl"
           >
             <div className="flex items-center gap-4">
               <span className="text-4xl">🔒</span>
               <div className="text-left">
-                <div className="text-blue-900 font-semibold">{t('login.secure')}</div>
-                <div className="text-red-500 text-sm">{t('login.docVerified')}</div>
+                <div className="text-white font-semibold">{t('login.secure')}</div>
+                <div className="text-blue-200 text-sm">{t('login.docVerified')}</div>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {}
+      {/* Right side – login form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <motion.div
           initial={{ opacity: 0, x: 50 }}
@@ -135,9 +134,9 @@ const LoginPage = () => {
           className="w-full max-w-md"
         >
           <div className="bg-white rounded-3xl shadow-2xl p-10">
-            {}
+            {/* Mobile logo */}
             <div className="lg:hidden text-center mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <span className="text-white font-bold text-2xl">PB</span>
               </div>
               <h2 className="text-2xl font-bold font-display text-blue-950">PropertyBazzar</h2>
@@ -184,7 +183,7 @@ const LoginPage = () => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
                   placeholder={t('login.emailPlaceholder')}
                 />
               </div>
@@ -196,7 +195,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
                   placeholder="••••••••"
                 />
               </div>
@@ -206,7 +205,7 @@ const LoginPage = () => {
                 whileTap={{ scale: 0.98 }}
                 disabled={loading}
                 type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all disabled:opacity-50"
+                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg transition-all disabled:opacity-50"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

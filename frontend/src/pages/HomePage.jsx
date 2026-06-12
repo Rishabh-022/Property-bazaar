@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -16,6 +16,20 @@ const HomePage = () => {
   });
 
   const [featuredProperties, setFeaturedProperties] = useState([]);
+
+  // Lock the random bubble values so they don't recalculate on every counter tick
+  const bubbles = useMemo(() => {
+    return [...Array(15)].map((_, i) => ({
+      id: i,
+      size: Math.random() * 300 + 50,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      xDest: Math.random() * 100 - 50,
+      yDest: Math.random() * 100 - 50,
+      duration: Math.random() * 10 + 10,
+      bg: i % 3 === 0 ? 'rgba(255, 255, 255, 0.3)' : i % 3 === 1 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.05)'
+    }));
+  }, []);
 
   useEffect(() => {
     const targets = { properties: 2500, customers: 15000, cities: 50, experience: 10 };
@@ -63,80 +77,72 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white">
       
-      {}
-      <section className="relative min-h-screen flex items-center overflow-hidden" 
-        style={{
-          background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 25%, #bfdbfe 50%, #93c5fd 75%, #60a5fa 100%)'
-        }}
-      >
-        {}
-        {[...Array(15)].map((_, i) => (
+      {/* HERO SECTION */}
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-blue-600">
+        {/* Animated floating circles (Fixed speed) */}
+        {bubbles.map((bubble) => (
           <motion.div
-            key={i}
+            key={bubble.id}
             className="absolute rounded-full"
             style={{
-              width: Math.random() * 300 + 50,
-              height: Math.random() * 300 + 50,
-              background: i % 3 === 0 
-                ? 'rgba(255, 255, 255, 0.3)' 
-                : i % 3 === 1 
-                  ? 'rgba(59, 130, 246, 0.1)' 
-                  : 'rgba(239, 68, 68, 0.05)',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              width: bubble.size,
+              height: bubble.size,
+              background: bubble.bg,
+              left: bubble.left,
+              top: bubble.top,
             }}
             animate={{
-              x: [0, Math.random() * 100 - 50, 0],
-              y: [0, Math.random() * 100 - 50, 0],
+              x: [0, bubble.xDest, 0],
+              y: [0, bubble.yDest, 0],
               scale: [1, 1.2, 1],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: bubble.duration,
               repeat: Infinity,
               ease: "easeInOut",
             }}
           />
         ))}
 
-        {}
+        {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col-reverse xl:grid xl:grid-cols-2 gap-12 items-center">
             
-            {}
+            {/* Left Column - Text */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              {}
+              {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-5 py-2.5 rounded-full mb-6 shadow-lg"
+                className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full mb-6 shadow-lg"
               >
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span className="text-blue-900 dark:text-blue-200 font-medium text-sm">{t('home.trustedBy')}</span>
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                <span className="text-white font-medium text-sm">{t('home.trustedBy')}</span>
               </motion.div>
 
-              <h1 className="text-5xl lg:text-7xl font-bold font-display text-blue-950 dark:text-blue-200 mb-6 leading-tight">
+              <h1 className="text-5xl lg:text-7xl font-bold font-display text-white mb-6 leading-tight">
                 {t('home.heroTitle')}
               </h1>
               
-              <p className="text-lg text-blue-800/70 dark:text-blue-300/80 mb-8 max-w-xl leading-relaxed">
+              <p className="text-lg text-blue-100 mb-8 max-w-xl leading-relaxed">
                 {t('home.heroSubtitle')}
               </p>
 
-              {}
+              {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4">
                 {user ? (
                   <Link to="/properties">
                     <motion.button
                       whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(37, 99, 235, 0.3)' }}
                       whileTap={{ scale: 0.95 }}
-                      className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg shadow-xl"
+                      className="px-8 py-4 bg-white text-blue-700 rounded-full font-semibold text-lg shadow-xl"
                     >
                       {t('home.exploreBtn')}
                     </motion.button>
@@ -146,7 +152,7 @@ const HomePage = () => {
                     <motion.button
                       whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(37, 99, 235, 0.3)' }}
                       whileTap={{ scale: 0.95 }}
-                      className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg shadow-xl"
+                      className="px-8 py-4 bg-white text-blue-700 rounded-full font-semibold text-lg shadow-xl"
                     >
                       {t('home.exploreBtn')}
                     </motion.button>
@@ -158,7 +164,7 @@ const HomePage = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="px-8 py-4 bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-300 rounded-full font-semibold text-lg border-2 border-blue-200 dark:border-blue-400 hover:border-blue-400 shadow-lg"
+                      className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-blue-700 transition-colors"
                     >
                       {t('home.sellBtn')}
                     </motion.button>
@@ -168,7 +174,7 @@ const HomePage = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="px-8 py-4 bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-300 rounded-full font-semibold text-lg border-2 border-blue-200 dark:border-blue-400 hover:border-blue-400 shadow-lg"
+                      className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-blue-700 transition-colors"
                     >
                       {t('home.sellBtn')}
                     </motion.button>
@@ -176,12 +182,12 @@ const HomePage = () => {
                 )}
               </div>
 
-              {}
+              {/* Stats Row */}
               <div className="flex gap-8 mt-12">
                 {[
-                  { num: '2,500+', label: t('home.stats.properties'), color: 'text-blue-600 dark:text-blue-400' },
-                  { num: '15,000+', label: t('home.stats.customers'), color: 'text-green-600 dark:text-green-400' },
-                  { num: '50+', label: t('home.stats.cities'), color: 'text-red-500 dark:text-red-400' },
+                  { num: '2,500+', label: t('home.stats.properties'), color: 'text-white' },
+                  { num: '15,000+', label: t('home.stats.customers'), color: 'text-white' },
+                  { num: '50+', label: t('home.stats.cities'), color: 'text-white' },
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
@@ -190,63 +196,92 @@ const HomePage = () => {
                     transition={{ delay: 0.6 + i * 0.2 }}
                   >
                     <div className={`text-3xl font-bold ${stat.color}`}>{stat.num}</div>
-                    <div className="text-blue-800/60 dark:text-blue-300/70 text-sm">{stat.label}</div>
+                    <div className="text-blue-100 text-sm">{stat.label}</div>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
 
-            {}
+            {/* Right Column – Dynamic Top Property */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="relative"
             >
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 relative z-10"
-              >
-                <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl h-64 mb-6 flex items-center justify-center">
-                  <span className="text-6xl">🏠</span>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-blue-950 dark:text-blue-200">₹1.5 Cr</span>
-                    <span className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-3 py-1 rounded-full text-sm font-medium">Available</span>
+              {featuredProperties.length > 0 ? (
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="bg-white rounded-3xl shadow-2xl p-6 relative z-10 border border-gray-100"
+                >
+                  {/* Dynamic Image */}
+                  <div className="rounded-2xl h-64 mb-6 overflow-hidden relative group">
+                    {featuredProperties[0].images && featuredProperties[0].images.length > 0 ? (
+                      <img
+                        src={featuredProperties[0].images[0].url}
+                        alt={featuredProperties[0].title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-blue-500 flex items-center justify-center">
+                        <span className="text-6xl">🏠</span>
+                      </div>
+                    )}
+
+                    {featuredProperties[0].status === 'Active' && (
+                      <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        ✅ Available
+                      </div>
+                    )}
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Luxury 3BHK Apartment</h3>
-                  <p className="text-gray-500 dark:text-gray-400">Mumbai, Maharashtra</p>
-                  <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-300">
-                    <span>🛏️ 3 Beds</span>
-                    <span>🛁 2 Baths</span>
-                    <span>📐 1200 sqft</span>
+
+                  {/* Dynamic Property Details */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-blue-950">
+                        {formatPrice(featuredProperties[0].pricing?.expectedPrice)}
+                      </span>
+                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                        {featuredProperties[0].propertyType}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 line-clamp-1">
+                      {featuredProperties[0].title}
+                    </h3>
+                    <p className="text-gray-500 text-sm flex items-center gap-1">
+                      📍 {featuredProperties[0].address?.city}, {featuredProperties[0].address?.state}
+                    </p>
+                    <div className="flex gap-4 text-sm text-gray-600 font-medium pt-3 border-t border-gray-100">
+                      <span>📐 {featuredProperties[0].dimensions?.area} {featuredProperties[0].dimensions?.areaUnit}</span>
+                    </div>
+
+                    <Link
+                      to={`/property/${featuredProperties[0]._id}`}
+                      className="block w-full text-center mt-4 py-3 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition-colors shadow-sm"
+                    >
+                      View Top Property
+                    </Link>
                   </div>
+                </motion.div>
+              ) : (
+                <div className="bg-white rounded-3xl shadow-2xl p-6 relative z-10 animate-pulse">
+                  <div className="bg-gray-200 rounded-2xl h-64 mb-6"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+                  <div className="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/3 mt-6"></div>
                 </div>
-              </motion.div>
+              )}
 
               <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -top-8 -right-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 flex items-center gap-3 z-20"
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3 z-20 border border-gray-100 hidden md:flex"
               >
-                <span className="text-2xl">🔒</span>
+                <span className="text-3xl">⭐</span>
                 <div>
-                  <div className="text-sm font-semibold text-blue-900 dark:text-blue-200">Verified</div>
-                  <div className="text-xs text-green-600 dark:text-green-400">Bhulekh Approved</div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 flex items-center gap-3 z-20"
-              >
-                <span className="text-2xl">⭐</span>
-                <div>
-                  <div className="text-sm font-semibold text-blue-900 dark:text-blue-200">Premium</div>
-                  <div className="text-xs text-yellow-600 dark:text-yellow-400">Top Rated</div>
+                  <div className="text-sm font-bold text-blue-900">#1 Top Rated</div>
+                  <div className="text-xs text-yellow-600">Highest Views & Rating</div>
                 </div>
               </motion.div>
             </motion.div>
@@ -254,8 +289,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      {}
-      <section className="py-24 bg-white dark:bg-gray-900">
+      {/* ============ FEATURES SECTION ============ */}
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -263,11 +298,11 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm uppercase tracking-wider">{t('home.whyUs')}</span>
-            <h2 className="text-4xl lg:text-5xl font-bold font-display text-blue-950 dark:text-blue-200 mt-4 mb-6">
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">{t('home.whyUs')}</span>
+            <h2 className="text-4xl lg:text-5xl font-bold font-display text-blue-950 mt-4 mb-6">
               {t('home.smartWay')}
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               {t('home.verifiedDesc')}
             </p>
           </motion.div>
@@ -279,24 +314,24 @@ const HomePage = () => {
                 title: t('home.verifiedDoc'),
                 desc: t('home.verifiedDocDesc'),
                 color: 'border-l-green-500',
-                bg: 'bg-green-50 dark:bg-green-900/30',
-                textColor: 'text-green-700 dark:text-green-400'
+                bg: 'bg-green-50',
+                textColor: 'text-green-700'
               },
               {
                 icon: '💰',
                 title: t('home.bestPrice'),
                 desc: t('home.bestPriceDesc'),
                 color: 'border-l-blue-500',
-                bg: 'bg-blue-50 dark:bg-blue-900/30',
-                textColor: 'text-blue-700 dark:text-blue-400'
+                bg: 'bg-blue-50',
+                textColor: 'text-blue-700'
               },
               {
                 icon: '⚡',
                 title: t('home.fastSecure'),
                 desc: t('home.fastSecureDesc'),
                 color: 'border-l-red-500',
-                bg: 'bg-red-50 dark:bg-red-900/30',
-                textColor: 'text-red-700 dark:text-red-400'
+                bg: 'bg-red-50',
+                textColor: 'text-red-700'
               },
             ].map((feature, i) => (
               <motion.div
@@ -306,22 +341,22 @@ const HomePage = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
                 whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-                className={`bg-white dark:bg-gray-800 rounded-2xl p-8 border-l-4 ${feature.color} shadow-lg hover:shadow-xl transition-all duration-300`}
+                className={`bg-white rounded-2xl p-8 border-l-4 ${feature.color} shadow-lg hover:shadow-xl transition-all duration-300`}
               >
                 <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center text-2xl mb-6`}>
                   {feature.icon}
                 </div>
                 <h3 className={`text-xl font-bold ${feature.textColor} mb-3`}>{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{feature.desc}</p>
+                <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {}
+      {/* ============ FEATURED PROPERTIES SECTION ============ */}
       {featuredProperties.length > 0 && (
-        <section className="py-24 bg-gradient-to-b from-white dark:from-gray-900 to-blue-50 dark:to-gray-800">
+        <section className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -329,13 +364,13 @@ const HomePage = () => {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm uppercase tracking-wider">
+              <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">
                 {t('home.latestListings')}
               </span>
-              <h2 className="text-4xl lg:text-5xl font-bold font-display text-blue-950 dark:text-blue-200 mt-4 mb-4">
+              <h2 className="text-4xl lg:text-5xl font-bold font-display text-blue-950 mt-4 mb-4">
                 {t('home.featured')}
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
                 {t('home.featuredDesc')}
               </p>
             </motion.div>
@@ -349,9 +384,9 @@ const HomePage = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -8 }}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden border border-gray-100 dark:border-gray-700 group"
+                  className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden border border-gray-100 group"
                 >
-                  <div className="relative h-52 bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center overflow-hidden">
+                  <div className="relative h-52 bg-blue-500 flex items-center justify-center overflow-hidden">
                     {property.images && property.images.length > 0 ? (
                       <img 
                         src={property.images[0].url} 
@@ -369,7 +404,7 @@ const HomePage = () => {
                     </div>
                     
                     <div className="absolute bottom-4 right-4">
-                      <span className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-blue-900 dark:text-blue-200 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                      <span className="bg-white/90 backdrop-blur-sm text-blue-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                         {formatPrice(property.pricing?.expectedPrice)}
                       </span>
                     </div>
@@ -377,17 +412,17 @@ const HomePage = () => {
 
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200 line-clamp-1">{property.title}</h3>
-                      <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap ml-2">
+                      <h3 className="text-lg font-bold text-blue-950 line-clamp-1">{property.title}</h3>
+                      <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap ml-2">
                         {property.propertyType}
                       </span>
                     </div>
                     
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 flex items-center gap-1">
+                    <p className="text-gray-500 text-sm mb-4 flex items-center gap-1">
                       📍 {property.address?.city}, {property.address?.state}
                     </p>
                     
-                    <div className="flex gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
+                    <div className="flex gap-4 mb-4 text-sm text-gray-600">
                       <span className="flex items-center gap-1">
                         📐 {property.dimensions?.area} {property.dimensions?.areaUnit}
                       </span>
@@ -408,7 +443,7 @@ const HomePage = () => {
                         >
                           🔒 {t('home.loginToView')}
                         </Link>
-                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                        <p className="text-xs text-gray-400 mt-2">
                           {t('home.registerPrompt')}
                         </p>
                       </div>
@@ -424,7 +459,7 @@ const HomePage = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-10 py-4 border-2 border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-300 rounded-full font-bold text-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all"
+                    className="px-10 py-4 border-2 border-blue-500 text-blue-600 rounded-full font-bold text-lg hover:bg-blue-50 transition-all"
                   >
                     {t('home.browseAll')}
                   </motion.button>
@@ -434,7 +469,7 @@ const HomePage = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-10 py-4 border-2 border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-300 rounded-full font-bold text-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all"
+                    className="px-10 py-4 border-2 border-blue-500 text-blue-600 rounded-full font-bold text-lg hover:bg-blue-50 transition-all"
                   >
                     {t('home.loginToBrowse')}
                   </motion.button>
@@ -445,8 +480,8 @@ const HomePage = () => {
         </section>
       )}
 
-      {}
-      <section className="py-24 bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-900 dark:to-gray-900">
+      {/* ============ CTA SECTION ============ */}
+      <section className="py-24 bg-blue-600">
         <div className="max-w-4xl mx-auto text-center px-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -456,14 +491,14 @@ const HomePage = () => {
             <h2 className="text-4xl lg:text-5xl font-bold font-display text-white mb-6">
               {t('home.cta')}
             </h2>
-            <p className="text-blue-100 dark:text-blue-300 text-lg mb-8">
+            <p className="text-blue-100 text-lg mb-8">
               {t('home.ctaDesc')}
             </p>
             <Link to={user ? "/properties" : "/register"}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 bg-white dark:bg-gray-800 text-blue-700 dark:text-blue-300 rounded-full font-bold text-lg shadow-2xl hover:shadow-white/30 transition-all"
+                className="px-10 py-4 bg-white text-blue-700 rounded-full font-bold text-lg shadow-2xl hover:shadow-white/30 transition-all"
               >
                 {user ? t('home.browseProperties') : t('home.getStarted')}
               </motion.button>

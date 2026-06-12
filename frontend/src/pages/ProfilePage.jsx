@@ -124,32 +124,30 @@ const ProfilePage = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      'Pending': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
-      'Active': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
-      'Rejected': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
-      'Sold': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+      'Pending': 'bg-yellow-100 text-yellow-700',
+      'Active': 'bg-green-100 text-green-700',
+      'Rejected': 'bg-red-100 text-red-700',
+      'Sold': 'bg-blue-100 text-blue-700'
     };
-    return badges[status] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    return badges[status] || 'bg-gray-100 text-gray-700';
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16" style={{
-      background: 'linear-gradient(180deg, #eff6ff 0%, #ffffff 100%)'
-    }}>
+    <div className="min-h-screen pt-24 pb-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <h1 className="text-4xl font-bold font-display text-blue-950 dark:text-blue-200">{t('profile.myProfile')}</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">{t('profile.manageAccount')}</p>
+          <h1 className="text-4xl font-bold font-display text-blue-950">{t('profile.myProfile')}</h1>
+          <p className="text-gray-500 mt-2">{t('profile.manageAccount')}</p>
         </motion.div>
 
-        {}
-        <div className="flex flex-wrap gap-2 mb-8 bg-white dark:bg-gray-800 rounded-2xl p-2 shadow-lg">
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8 bg-white rounded-2xl p-2 shadow-lg">
           <button onClick={() => setActiveTab('profile')}
             className={`px-6 py-3 rounded-xl font-medium transition-all ${
               activeTab === 'profile' 
                 ? 'bg-blue-600 text-white shadow-lg' 
-                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-50'
             }`}>
             👤 {t('profile.profile')}
           </button>
@@ -157,7 +155,7 @@ const ProfilePage = () => {
             className={`px-6 py-3 rounded-xl font-medium transition-all ${
               activeTab === 'listings' 
                 ? 'bg-blue-600 text-white shadow-lg' 
-                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-50'
             }`}>
             🏠 {t('profile.myListings')} ({myProperties.length})
           </button>
@@ -165,105 +163,105 @@ const ProfilePage = () => {
             className={`px-6 py-3 rounded-xl font-medium transition-all ${
               activeTab === 'favorites' 
                 ? 'bg-blue-600 text-white shadow-lg' 
-                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-50'
             }`}>
             ❤️ {t('profile.saved')} ({favorites.length})
           </button>
         </div>
 
-        {}
+        {/* Profile Tab */}
         {activeTab === 'profile' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-2xl">
+            className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl">
             
             {message && (
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-xl mb-6">
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6">
                 {message}
               </div>
             )}
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl mb-6">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
                 {error}
               </div>
             )}
 
             <div className="flex items-center gap-6 mb-8">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+              <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                 {user?.fullName?.charAt(0) || 'U'}
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-blue-950 dark:text-blue-200">{user?.fullName}</h2>
-                <p className="text-gray-500 dark:text-gray-400">{user?.email}</p>
-                <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">{user?.role === 'admin' ? '🔒 Admin' : '👤 User'}</span>
+                <h2 className="text-2xl font-bold text-blue-950">{user?.fullName}</h2>
+                <p className="text-gray-500">{user?.email}</p>
+                <span className="text-sm text-blue-600 font-medium">{user?.role === 'admin' ? '🔒 Admin' : '👤 User'}</span>
               </div>
             </div>
 
             {!editMode ? (
               <div className="space-y-4 mb-8">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{t('register.fullName')}</span>
-                    <p className="font-semibold text-gray-800 dark:text-gray-200">{user?.fullName}</p>
+                  <div className="bg-gray-50 rounded-xl p-4">
+                    <span className="text-sm text-gray-500">{t('register.fullName')}</span>
+                    <p className="font-semibold text-gray-800">{user?.fullName}</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{t('register.phone')}</span>
-                    <p className="font-semibold text-gray-800 dark:text-gray-200">{user?.phone || t('profile.notProvided')}</p>
+                  <div className="bg-gray-50 rounded-xl p-4">
+                    <span className="text-sm text-gray-500">{t('register.phone')}</span>
+                    <p className="font-semibold text-gray-800">{user?.phone || t('profile.notProvided')}</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{t('register.email')}</span>
-                    <p className="font-semibold text-gray-800 dark:text-gray-200">{user?.email}</p>
+                  <div className="bg-gray-50 rounded-xl p-4">
+                    <span className="text-sm text-gray-500">{t('register.email')}</span>
+                    <p className="font-semibold text-gray-800">{user?.email}</p>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{t('register.aadhaar')}</span>
-                    <p className="font-semibold text-gray-800 dark:text-gray-200">{user?.aadhaarNumber || t('profile.notProvided')}</p>
+                  <div className="bg-gray-50 rounded-xl p-4">
+                    <span className="text-sm text-gray-500">{t('register.aadhaar')}</span>
+                    <p className="font-semibold text-gray-800">{user?.aadhaarNumber || t('profile.notProvided')}</p>
                   </div>
                 </div>
                 
                 <button onClick={() => setEditMode(true)}
-                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transition-all">
                   ✏️ {t('profile.editProfile')}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('register.fullName')}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('register.fullName')}</label>
                   <input type="text" value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('register.phone')}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('register.phone')}</label>
                   <input type="tel" value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('register.aadhaar')}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('register.aadhaar')}</label>
                   <input type="text" value={formData.aadhaarNumber}
                     onChange={(e) => setFormData({ ...formData, aadhaarNumber: e.target.value })}
                     maxLength={12}
-                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('profile.newPassword')}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('profile.newPassword')}</label>
                   <input type="password" value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('profile.confirmNewPassword')}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('profile.confirmNewPassword')}</label>
                   <input type="password" value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white" />
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
                 <div className="flex gap-3">
                   <button type="submit"
-                    className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
+                    className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transition-all">
                     💾 {t('profile.saveChanges')}
                   </button>
                   <button type="button" onClick={() => setEditMode(false)}
-                    className="px-6 py-3 border-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                    className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all">
                     {t('profile.cancel')}
                   </button>
                 </div>
@@ -272,20 +270,20 @@ const ProfilePage = () => {
           </motion.div>
         )}
 
-        {}
+        {/* My Listings Tab */}
         {activeTab === 'listings' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             {loading ? (
               <div className="flex justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
               </div>
             ) : myProperties.length === 0 ? (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-12 text-center">
+              <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
                 <span className="text-6xl mb-4 block">🏠</span>
-                <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-2">{t('profile.noProperties')}</h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-6">{t('profile.noPropertiesDesc')}</p>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">{t('profile.noProperties')}</h3>
+                <p className="text-gray-500 mb-6">{t('profile.noPropertiesDesc')}</p>
                 <button onClick={() => navigate('/sell')}
-                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
+                  className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transition-all">
                   ➕ {t('profile.listFirst')}
                 </button>
               </div>
@@ -293,8 +291,8 @@ const ProfilePage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {myProperties.map((property) => (
                   <motion.div key={property._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
-                    <div className="relative h-40 bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                    <div className="relative h-40 bg-blue-500 flex items-center justify-center">
                       {property.images?.[0]?.url ? (
                         <img src={property.images[0].url} alt="" className="w-full h-full object-cover" />
                       ) : (
@@ -305,13 +303,13 @@ const ProfilePage = () => {
                       </span>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold text-blue-950 dark:text-blue-200 mb-2 truncate">{property.title}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                      <h3 className="font-bold text-blue-950 mb-2 truncate">{property.title}</h3>
+                      <p className="text-sm text-gray-500 mb-3">
                         📍 {property.address?.city}, {property.address?.state}
                       </p>
                       <div className="flex justify-between items-center mb-4">
-                        <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatPrice(property.pricing?.expectedPrice)}</span>
-                        <span className="text-xs text-gray-400 dark:text-gray-500">{property.dimensions?.area} {property.dimensions?.areaUnit}</span>
+                        <span className="text-lg font-bold text-blue-600">{formatPrice(property.pricing?.expectedPrice)}</span>
+                        <span className="text-xs text-gray-400">{property.dimensions?.area} {property.dimensions?.areaUnit}</span>
                       </div>
                       <div className="flex gap-2">
                         <button onClick={() => navigate(`/property/${property._id}`)}
@@ -331,20 +329,20 @@ const ProfilePage = () => {
           </motion.div>
         )}
 
-        {}
+        {/* Saved Favorites Tab */}
         {activeTab === 'favorites' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             {loading ? (
               <div className="flex justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"></div>
               </div>
             ) : favorites.length === 0 ? (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-12 text-center">
+              <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
                 <span className="text-6xl mb-4 block">❤️</span>
-                <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-2">{t('profile.noSaved')}</h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-6">{t('profile.noSavedDesc')}</p>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">{t('profile.noSaved')}</h3>
+                <p className="text-gray-500 mb-6">{t('profile.noSavedDesc')}</p>
                 <button onClick={() => navigate('/properties')}
-                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
+                  className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-lg transition-all">
                   {t('profile.browse')}
                 </button>
               </div>
@@ -352,9 +350,9 @@ const ProfilePage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {favorites.map((property) => (
                   <motion.div key={property._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 cursor-pointer"
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer"
                     onClick={() => navigate(`/property/${property._id}`)}>
-                    <div className="relative h-40 bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                    <div className="relative h-40 bg-blue-500 flex items-center justify-center">
                       {property.images?.[0]?.url ? (
                         <img src={property.images[0].url} alt="" className="w-full h-full object-cover" />
                       ) : (
@@ -365,13 +363,13 @@ const ProfilePage = () => {
                       </div>
                     </div>
                     <div className="p-5">
-                      <h3 className="font-bold text-blue-950 dark:text-blue-200 mb-2 truncate">{property.title}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                      <h3 className="font-bold text-blue-950 mb-2 truncate">{property.title}</h3>
+                      <p className="text-sm text-gray-500 mb-3">
                         📍 {property.address?.city}, {property.address?.state}
                       </p>
                       <div className="flex justify-between items-center">
-                        <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatPrice(property.pricing?.expectedPrice)}</span>
-                        <span className="text-xs text-gray-400 dark:text-gray-500">{property.dimensions?.area} {property.dimensions?.areaUnit}</span>
+                        <span className="text-lg font-bold text-blue-600">{formatPrice(property.pricing?.expectedPrice)}</span>
+                        <span className="text-xs text-gray-400">{property.dimensions?.area} {property.dimensions?.areaUnit}</span>
                       </div>
                     </div>
                   </motion.div>

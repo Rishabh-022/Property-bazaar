@@ -2,9 +2,11 @@ const Property = require('../models/Property');
 const cloudinary = require('../config/cloudinary');
 const fs = require('fs');
 
+// @desc    Create a new property listing
+// @route   POST /api/properties
+// @access  Private
 const createProperty = async (req, res) => {
     try {
-     
         if (!req.user.isVerified) {
             return res.status(403).json({
                 success: false,
@@ -13,31 +15,14 @@ const createProperty = async (req, res) => {
         }
 
         const {
-            sellerName,
-            sellerPhone,
-            aadhaarNumber,
-            panNumber,
-            propertyType,
-            propertySubType,
-            registrationNumber,
-            khataNumber,
-            khasraNumber,
-            surveyNumber,
-            reraId,
-            ownershipType,
-            title,
-            description,
-            area,
-            areaUnit,
-            street,
-            landmark,
-            locality,
-            city,
-            district,
-            state,
-            pincode,
-            expectedPrice,
-            priceNegotiable
+            sellerName, sellerPhone, aadhaarNumber, panNumber,
+            propertyType, propertySubType, registrationNumber,
+            khataNumber, khasraNumber, surveyNumber, reraId,
+            ownershipType, title, description, area, areaUnit,
+            street, landmark, locality, city, district, state, pincode,
+            expectedPrice, priceNegotiable,
+            // ---- NEW FIELDS ----
+            bedrooms, bathrooms, furnishing, possessionStatus
         } = req.body;
 
         if (!sellerName || !aadhaarNumber || !registrationNumber || !khataNumber || 
@@ -63,7 +48,7 @@ const createProperty = async (req, res) => {
                 images.push({
                     url: result.secure_url,
                     publicId: result.public_id,
-                    isPrimary: i === 0   
+                    isPrimary: i === 0
                 });
                 fs.unlinkSync(file.path);
             }
@@ -89,6 +74,12 @@ const createProperty = async (req, res) => {
                 area: Number(area),
                 areaUnit: areaUnit || 'sqft'
             },
+            // ---- NEW FIELDS ----
+            bedrooms: bedrooms ? Number(bedrooms) : 0,
+            bathrooms: bathrooms ? Number(bathrooms) : 0,
+            furnishing: furnishing || undefined,
+            possessionStatus: possessionStatus || undefined,
+            // ---- END NEW FIELDS ----
             address: {
                 street,
                 landmark: landmark || '',
@@ -103,7 +94,13 @@ const createProperty = async (req, res) => {
                 priceNegotiable: priceNegotiable === 'true' || priceNegotiable === true
             },
             images,
-            status: 'Pending'
+            status: 'Pending',
+            statusHistory: [{
+                status: 'Pending',
+                changedBy: req.user._id,
+                changedAt: Date.now(),
+                note: 'Property submitted for verification'
+            }]
         });
 
         res.status(201).json({
@@ -116,9 +113,7 @@ const createProperty = async (req, res) => {
         console.error('Create Property Error:', error);
         if (req.files) {
             req.files.forEach(file => {
-                if (fs.existsSync(file.path)) {
-                    fs.unlinkSync(file.path);
-                }
+                if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
             });
         }
         if (error.code === 11000) {
@@ -132,16 +127,24 @@ const createProperty = async (req, res) => {
     }
 };
 
+// @desc    Get all properties (with advanced filters)
+// @route   GET /api/properties
+// @access  Public
 const getProperties = async (req, res) => {
     try {
-        const { city, state, propertyType, minPrice, maxPrice, status, sort, page = 1, limit = 10 } = req.query;
+        const {
+            city, state, propertyType, minPrice, maxPrice, status,
+            // ---- NEW QUERY PARAMS ----
+            bedrooms, bathrooms, furnishing, possessionStatus,
+            sort, page = 1, limit = 10
+        } = req.query;
 
         const query = {};
         if (city) query['address.city'] = new RegExp(city, 'i');
         if (state) query['address.state'] = new RegExp(state, 'i');
         if (propertyType) query.propertyType = propertyType;
         if (status) query.status = status;
-        else query.status = 'Active';   // default show only active listings
+        else query.status = 'Active';
 
         if (minPrice || maxPrice) {
             query['pricing.expectedPrice'] = {};
@@ -149,11 +152,19 @@ const getProperties = async (req, res) => {
             if (maxPrice) query['pricing.expectedPrice'].$lte = Number(maxPrice);
         }
 
+        // ---- NEW FILTERS ----
+        if (bedrooms) query.bedrooms = Number(bedrooms);
+        if (bathrooms) query.bathrooms = Number(bathrooms);
+        if (furnishing) query.furnishing = furnishing;
+        if (possessionStatus) query.possessionStatus = possessionStatus;
+
         let sortOption = {};
         if (sort === 'price_asc') sortOption['pricing.expectedPrice'] = 1;
         else if (sort === 'price_desc') sortOption['pricing.expectedPrice'] = -1;
         else if (sort === 'newest') sortOption.createdAt = -1;
         else if (sort === 'oldest') sortOption.createdAt = 1;
+        else if (sort === 'mostViewed') sortOption.views = -1;
+        else if (sort === 'highestRated') sortOption.averageRating = -1;
         else sortOption.createdAt = -1;
 
         const skip = (Number(page) - 1) * Number(limit);
@@ -180,11 +191,14 @@ const getProperties = async (req, res) => {
     }
 };
 
-
+// @desc    Get single property by ID
+// @route   GET /api/properties/:id
+// @access  Public
 const getPropertyById = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id)
-            .populate('owner', 'fullName email phone');
+            .populate('owner', 'fullName email phone')
+            .populate('statusHistory.changedBy', 'fullName');
         if (!property) {
             return res.status(404).json({ success: false, message: 'Property not found' });
         }
@@ -201,6 +215,9 @@ const getPropertyById = async (req, res) => {
     }
 };
 
+// @desc    Get logged in user's properties
+// @route   GET /api/properties/my-listings
+// @access  Private
 const getMyProperties = async (req, res) => {
     try {
         const properties = await Property.find({ owner: req.user._id })
@@ -212,6 +229,9 @@ const getMyProperties = async (req, res) => {
     }
 };
 
+// @desc    Update property listing
+// @route   PUT /api/properties/:id
+// @access  Private
 const updateProperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id);
@@ -223,7 +243,8 @@ const updateProperty = async (req, res) => {
         }
 
         const updateFields = ['title', 'description', 'propertyType', 'propertySubType',
-            'registrationNumber', 'khataNumber', 'khasraNumber', 'surveyNumber', 'reraId', 'ownershipType'];
+            'registrationNumber', 'khataNumber', 'khasraNumber', 'surveyNumber', 'reraId', 'ownershipType',
+            'bedrooms', 'bathrooms', 'furnishing', 'possessionStatus']; // added new fields
         updateFields.forEach(field => {
             if (req.body[field] !== undefined) property[field] = req.body[field];
         });
@@ -247,6 +268,9 @@ const updateProperty = async (req, res) => {
     }
 };
 
+// @desc    Delete property listing
+// @route   DELETE /api/properties/:id
+// @access  Private
 const deleteProperty = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id);
@@ -269,9 +293,11 @@ const deleteProperty = async (req, res) => {
     }
 };
 
+// @desc    Upload additional images to property
+// @route   POST /api/properties/:id/images
+// @access  Private
 const uploadPropertyImages = async (req, res) => {
     try {
-        // Check email verification
         if (!req.user.isVerified) {
             return res.status(403).json({
                 success: false,

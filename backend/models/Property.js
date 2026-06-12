@@ -96,6 +96,26 @@ const propertySchema = new mongoose.Schema({
             default: 'sqft'
         }
     },
+
+    // ------- NEW FIELDS -------
+    bedrooms: {
+        type: Number,
+        min: [0, 'Bedrooms cannot be negative'],
+        default: 0
+    },
+    bathrooms: {
+        type: Number,
+        min: [0, 'Bathrooms cannot be negative'],
+        default: 0
+    },
+    furnishing: {
+        type: String,
+        enum: ['Furnished', 'Semi-Furnished', 'Unfurnished']
+    },
+    possessionStatus: {
+        type: String,
+        enum: ['Ready to Move', 'Under Construction']
+    },
     
     address: {
         street: {
@@ -169,18 +189,37 @@ const propertySchema = new mongoose.Schema({
         ref: 'User'
     },
     averageRating: {
-    type: Number,
-    default: 0
+        type: Number,
+        default: 0
     },
     numReviews: {
-    type: Number,
-    default: 0
+        type: Number,
+        default: 0
     },
     
     views: {
         type: Number,
         default: 0
-    }
+    },
+
+    // ===== Status History =====
+    statusHistory: [{
+        status: {
+            type: String,
+            enum: ['Draft', 'Pending', 'Active', 'Rejected', 'Sold', 'Expired'],
+            required: true
+        },
+        changedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        changedAt: {
+            type: Date,
+            default: Date.now
+        },
+        note: String
+    }]
+    
 }, {
     timestamps: true
 });

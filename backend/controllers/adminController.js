@@ -77,7 +77,8 @@ const getAllProperties = async (req, res) => {
 const getPropertyDetails = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id)
-            .populate('owner', 'fullName email phone aadhaarNumber');
+            .populate('owner', 'fullName email phone aadhaarNumber')
+            .populate('statusHistory.changedBy', 'fullName');   // NEW: populate the admin name
 
         if (!property) {
             return res.status(404).json({
@@ -120,7 +121,15 @@ const verifyProperty = async (req, res) => {
         property.status = 'Active';
         property.verifiedAt = Date.now();
         property.verifiedBy = req.user._id;
-        
+
+        // ---- NEW: record in statusHistory ----
+        property.statusHistory.push({
+            status: 'Active',
+            changedBy: req.user._id,
+            changedAt: Date.now(),
+            note: 'Approved by admin'
+        });
+
         await property.save();
 
         let pdfBuffer;
@@ -191,7 +200,15 @@ const rejectProperty = async (req, res) => {
         property.rejectionReason = reason || 'Does not meet verification criteria';
         property.rejectedAt = Date.now();
         property.rejectedBy = req.user._id;
-        
+
+        // ---- NEW: record in statusHistory ----
+        property.statusHistory.push({
+            status: 'Rejected',
+            changedBy: req.user._id,
+            changedAt: Date.now(),
+            note: reason || 'Does not meet verification criteria'
+        });
+
         await property.save();
 
         if (property.owner && property.owner.email) {
@@ -228,7 +245,6 @@ const rejectProperty = async (req, res) => {
 
 const getAdminAnalytics = async (req, res) => {
     try {
-        
         const statusCounts = await Property.aggregate([
             { $group: { _id: '$status', count: { $sum: 1 } } }
         ]);

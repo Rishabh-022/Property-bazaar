@@ -46,7 +46,7 @@ const PropertyMap = ({ address }) => {
 
   if (error) {
     return (
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-sm text-red-600 dark:text-red-400">
+      <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-600">
         {error}
       </div>
     );
@@ -54,7 +54,7 @@ const PropertyMap = ({ address }) => {
 
   if (!center) {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 rounded-xl h-[300px] flex items-center justify-center text-gray-400 dark:text-gray-500">
+      <div className="bg-gray-100 rounded-xl h-[300px] flex items-center justify-center text-gray-400">
         Loading map…
       </div>
     );
@@ -217,19 +217,19 @@ const PropertyDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 pt-20">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 pt-20">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600"></div>
       </div>
     );
   }
 
   if (!property) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 pt-20">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 pt-20">
         <div className="text-center">
           <span className="text-6xl mb-4 block">🏚️</span>
-          <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200">Property Not Found</h2>
-          <Link to="/properties" className="text-blue-600 dark:text-blue-400 hover:underline mt-4 inline-block">
+          <h2 className="text-2xl font-bold text-gray-700">Property Not Found</h2>
+          <Link to="/properties" className="text-blue-600 hover:underline mt-4 inline-block">
             ← Back to Properties
           </Link>
         </div>
@@ -238,11 +238,11 @@ const PropertyDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 pt-24 pb-16">
+    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6">
-          <Link to="/properties" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+          <Link to="/properties" className="text-blue-600 hover:text-blue-800 font-medium">
             ← Back to Properties
           </Link>
         </motion.div>
@@ -252,9 +252,9 @@ const PropertyDetailPage = () => {
           <div className="lg:col-span-2 space-y-6">
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+              className="bg-white rounded-2xl shadow-xl overflow-hidden">
               
-              <div className="relative h-96 bg-gradient-to-br from-blue-500 to-blue-700">
+              <div className="relative h-96 bg-blue-500">
                 {property.images && property.images.length > 0 ? (
                   <img src={property.images[selectedImage]?.url} alt={property.title}
                     className="w-full h-full object-cover" />
@@ -278,7 +278,7 @@ const PropertyDetailPage = () => {
                   {property.images.map((img, index) => (
                     <button key={index} onClick={() => setSelectedImage(index)}
                       className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                        selectedImage === index ? 'border-blue-600 shadow-lg' : 'border-gray-200 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500'
+                        selectedImage === index ? 'border-blue-600 shadow-lg' : 'border-gray-200 hover:border-blue-400'
                       }`}>
                       <img src={img.url} alt={`View ${index + 1}`} className="w-full h-full object-cover" />
                     </button>
@@ -288,74 +288,105 @@ const PropertyDetailPage = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+              className="bg-white rounded-2xl shadow-xl p-8">
               
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <FavoriteButton propertyId={property._id} size="text-3xl" />
-                    <h1 className="text-3xl font-bold text-blue-950 dark:text-blue-200">{property.title}</h1>
+                    <h1 className="text-3xl font-bold text-blue-950">{property.title}</h1>
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                  <p className="text-gray-500 flex items-center gap-1">
                     📍 {property.address?.street}, {property.address?.locality}, {property.address?.city}, {property.address?.state} - {property.address?.pincode}
                   </p>
                 </div>
-                <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-semibold">
+                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
                   {property.propertyType}
                 </span>
               </div>
 
-              <div className="flex gap-6 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex gap-6 mb-8 pb-8 border-b border-gray-200">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{formatPrice(property.pricing?.expectedPrice)}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">Price</div>
+                  <div className="text-2xl font-bold text-blue-600">{formatPrice(property.pricing?.expectedPrice)}</div>
+                  <div className="text-sm text-gray-500">Price</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{property.dimensions?.area}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">{property.dimensions?.areaUnit}</div>
+                  <div className="text-2xl font-bold text-blue-600">{property.dimensions?.area}</div>
+                  <div className="text-sm text-gray-500">{property.dimensions?.areaUnit}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{property.views || 0}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">Views</div>
+                  <div className="text-2xl font-bold text-blue-600">{property.views || 0}</div>
+                  <div className="text-sm text-gray-500">Views</div>
                 </div>
               </div>
 
-              <h2 className="text-xl font-bold text-blue-950 dark:text-blue-200 mb-4">Description</h2>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">{property.description}</p>
+              <h2 className="text-xl font-bold text-blue-950 mb-4">Description</h2>
+              <p className="text-gray-600 leading-relaxed mb-8">{property.description}</p>
 
-              <h2 className="text-xl font-bold text-blue-950 dark:text-blue-200 mb-4">Document Verification</h2>
+              <h2 className="text-xl font-bold text-blue-950 mb-4">Document Verification</h2>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4">
-                  <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-semibold">
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-green-700 font-semibold">
                     <span>✅</span> Aadhaar Verified
                   </div>
-                  <div className="text-sm text-green-600 dark:text-green-400 mt-1">{property.aadhaarNumber}</div>
+                  <div className="text-sm text-green-600 mt-1">{property.aadhaarNumber}</div>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
-                  <div className="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-semibold">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-blue-700 font-semibold">
                     <span>📋</span> Registration
                   </div>
-                  <div className="text-sm text-blue-600 dark:text-blue-400 mt-1">{property.registrationNumber}</div>
+                  <div className="text-sm text-blue-600 mt-1">{property.registrationNumber}</div>
                 </div>
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
-                  <div className="flex items-center gap-2 text-yellow-700 dark:text-yellow-400 font-semibold">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-yellow-700 font-semibold">
                     <span>📄</span> Khata Number
                   </div>
-                  <div className="text-sm text-yellow-600 dark:text-yellow-400 mt-1">{property.khataNumber}</div>
+                  <div className="text-sm text-yellow-600 mt-1">{property.khataNumber}</div>
                 </div>
-                <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl p-4">
-                  <div className="flex items-center gap-2 text-purple-700 dark:text-purple-400 font-semibold">
+                <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-purple-700 font-semibold">
                     <span>🏷️</span> Khasra Number
                   </div>
-                  <div className="text-sm text-purple-600 dark:text-purple-400 mt-1">{property.khasraNumber || 'N/A'}</div>
+                  <div className="text-sm text-purple-600 mt-1">{property.khasraNumber || 'N/A'}</div>
                 </div>
               </div>
 
-              <div className="mt-8 border-t dark:border-gray-700 pt-8">
-                <h2 className="text-xl font-bold text-blue-950 dark:text-blue-200 mb-6 flex items-center gap-2">
+              {/* ---------- STATUS HISTORY (only for the property owner) ---------- */}
+              {user && property.owner?._id === user._id && property.statusHistory && property.statusHistory.length > 0 && (
+                <div className="mt-8 border-t pt-8">
+                  <h2 className="text-xl font-bold text-blue-950 mb-4">📋 Status History</h2>
+                  <div className="space-y-2">
+                    {property.statusHistory.map((entry, idx) => (
+                      <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                            entry.status === 'Active' ? 'bg-green-100 text-green-700' :
+                            entry.status === 'Rejected' ? 'bg-red-100 text-red-700' :
+                            'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            {entry.status}
+                          </span>
+                          <span className="text-sm text-gray-700">{entry.note || '-'}</span>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-gray-500">
+                            {new Date(entry.changedAt).toLocaleString('en-IN')}
+                          </p>
+                          {entry.changedBy && (
+                            <p className="text-xs text-gray-500">by {entry.changedBy.fullName}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-8 border-t border-gray-200 pt-8">
+                <h2 className="text-xl font-bold text-blue-950 mb-6 flex items-center gap-2">
                   Reviews & Ratings
                   {property.averageRating > 0 && (
-                    <span className="text-base font-normal text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                    <span className="text-base font-normal text-gray-500 flex items-center gap-1">
                       <StarRating rating={property.averageRating || 0} interactive={false} size="text-lg" />
                       <span>({property.numReviews} reviews)</span>
                     </span>
@@ -363,29 +394,29 @@ const PropertyDetailPage = () => {
                 </h2>
 
                 {user && user._id !== property.owner?._id && (
-                  <form onSubmit={handleSubmitReview} className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 mb-8">
-                    <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-4">Write a Review</h3>
-                    {reviewError && <p className="text-red-600 dark:text-red-400 text-sm mb-3">{reviewError}</p>}
-                    {reviewSuccess && <p className="text-green-600 dark:text-green-400 text-sm mb-3">{reviewSuccess}</p>}
+                  <form onSubmit={handleSubmitReview} className="bg-blue-50 rounded-xl p-6 mb-8">
+                    <h3 className="font-semibold text-blue-900 mb-4">Write a Review</h3>
+                    {reviewError && <p className="text-red-600 text-sm mb-3">{reviewError}</p>}
+                    {reviewSuccess && <p className="text-green-600 text-sm mb-3">{reviewSuccess}</p>}
                     
                     <div className="mb-4">
-                      <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">Your Rating</label>
+                      <label className="block text-sm text-gray-700 mb-2">Your Rating</label>
                       <StarRating rating={reviewRating} onRate={setReviewRating} />
                     </div>
                     <div className="mb-4">
-                      <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2">Your Comment</label>
+                      <label className="block text-sm text-gray-700 mb-2">Your Comment</label>
                       <textarea
                         value={reviewComment}
                         onChange={(e) => setReviewComment(e.target.value)}
                         rows={3}
-                        className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+                        className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 outline-none"
                         placeholder="Share your experience with this property..."
                       />
                     </div>
                     <button
                       type="submit"
                       disabled={submittingReview}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all disabled:opacity-50"
+                      className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all disabled:opacity-50"
                     >
                       {submittingReview ? 'Submitting...' : 'Submit Review'}
                     </button>
@@ -393,19 +424,19 @@ const PropertyDetailPage = () => {
                 )}
 
                 {reviews.length === 0 ? (
-                  <p className="text-gray-500 dark:text-gray-400 text-center py-8">No reviews yet. Be the first to review!</p>
+                  <p className="text-gray-500 text-center py-8">No reviews yet. Be the first to review!</p>
                 ) : (
                   <div className="space-y-4">
                     {reviews.map((review) => (
-                      <div key={review._id} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+                      <div key={review._id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white font-bold">
+                            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                               {review.user?.fullName?.charAt(0) || 'U'}
                             </div>
                             <div>
-                              <p className="font-semibold text-gray-800 dark:text-gray-200">{review.user?.fullName || 'Unknown'}</p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                              <p className="font-semibold text-gray-800">{review.user?.fullName || 'Unknown'}</p>
+                              <p className="text-xs text-gray-500">
                                 {new Date(review.createdAt).toLocaleDateString('en-IN', {
                                   year: 'numeric', month: 'short', day: 'numeric'
                                 })}
@@ -414,7 +445,7 @@ const PropertyDetailPage = () => {
                           </div>
                           <StarRating rating={review.rating} interactive={false} size="text-lg" />
                         </div>
-                        <p className="text-gray-600 dark:text-gray-300 mt-2">{review.comment}</p>
+                        <p className="text-gray-600 mt-2">{review.comment}</p>
                       </div>
                     ))}
                   </div>
@@ -426,68 +457,68 @@ const PropertyDetailPage = () => {
           <div className="space-y-6">
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200 mb-4">Seller Information</h3>
+              className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-blue-950 mb-4">Seller Information</h3>
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
                   {property.sellerName?.charAt(0) || 'S'}
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-800 dark:text-gray-200">{property.sellerName}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">{property.owner?.email || 'N/A'}</div>
+                  <div className="font-semibold text-gray-800">{property.sellerName}</div>
+                  <div className="text-sm text-gray-500">{property.owner?.email || 'N/A'}</div>
                 </div>
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500">
                 📞 {property.sellerPhone}
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200 mb-4">Property Details</h3>
+              className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-blue-950 mb-4">Property Details</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Property Type</span>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">{property.propertyType}</span>
+                  <span className="text-gray-500">Property Type</span>
+                  <span className="font-semibold text-gray-700">{property.propertyType}</span>
                 </div>
                 {property.propertySubType && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500 dark:text-gray-400">Sub Type</span>
-                    <span className="font-semibold text-gray-700 dark:text-gray-300">{property.propertySubType}</span>
+                    <span className="text-gray-500">Sub Type</span>
+                    <span className="font-semibold text-gray-700">{property.propertySubType}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Area</span>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">{property.dimensions?.area} {property.dimensions?.areaUnit}</span>
+                  <span className="text-gray-500">Area</span>
+                  <span className="font-semibold text-gray-700">{property.dimensions?.area} {property.dimensions?.areaUnit}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Status</span>
+                  <span className="text-gray-500">Status</span>
                   <span className={`font-semibold ${
-                    property.status === 'Active' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
+                    property.status === 'Active' ? 'text-green-600' : 'text-yellow-600'
                   }`}>
                     {property.status}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Rating</span>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                  <span className="text-gray-500">Rating</span>
+                  <span className="font-semibold text-gray-700 flex items-center gap-1">
                     <StarRating rating={property.averageRating || 0} interactive={false} size="text-sm" />
-                    {property.numReviews > 0 && <span className="text-xs text-gray-500 dark:text-gray-400">({property.numReviews})</span>}
+                    {property.numReviews > 0 && <span className="text-xs text-gray-500">({property.numReviews})</span>}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">Listed On</span>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">
+                  <span className="text-gray-500">Listed On</span>
+                  <span className="font-semibold text-gray-700">
                     {new Date(property.createdAt).toLocaleDateString('en-IN')}
                   </span>
                 </div>
               </div>
             </motion.div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-              <div className="p-4 border-b border-gray-100 dark:border-gray-700">
-                <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200">📍 Location</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="p-4 border-b border-gray-100">
+                <h3 className="text-lg font-bold text-blue-950">📍 Location</h3>
+                <p className="text-sm text-gray-500">
                   {property.address?.locality}, {property.address?.city}
                 </p>
               </div>
@@ -499,7 +530,7 @@ const PropertyDetailPage = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleChatWithSeller}
-                className="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-lg shadow-xl transition-all flex items-center justify-center gap-2"
               >
                 💬 Chat with Seller
               </motion.button>
@@ -508,19 +539,19 @@ const PropertyDetailPage = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-lg shadow-xl transition-all"
             >
               📞 Contact Seller
             </motion.button>
 
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
-              <h3 className="text-lg font-bold text-blue-950 dark:text-blue-200 mb-4 flex items-center gap-2">
-                <FaShareAlt className="text-blue-600 dark:text-blue-400" /> Share This Property
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h3 className="text-lg font-bold text-blue-950 mb-4 flex items-center gap-2">
+                <FaShareAlt className="text-blue-600" /> Share This Property
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={handleNativeShare}
-                  className="py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl font-medium text-gray-700 dark:text-gray-200 transition-all flex items-center justify-center gap-2"
+                  className="py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-gray-700 transition-all flex items-center justify-center gap-2"
                 >
                   <FaLink /> {navigator.share ? 'Share' : 'Copy Link'}
                 </button>
@@ -546,8 +577,8 @@ const PropertyDetailPage = () => {
             </div>
 
             {property.pricing?.priceNegotiable && (
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-center">
-                <span className="text-green-700 dark:text-green-400 font-semibold">💰 Price is Negotiable!</span>
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+                <span className="text-green-700 font-semibold">💰 Price is Negotiable!</span>
               </div>
             )}
           </div>

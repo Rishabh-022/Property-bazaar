@@ -5,8 +5,6 @@ body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  background: #ffffff;
-}
-body {
-  @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100;
+  background: #f8fafc;   /* matches Tailwind's bg-slate-50 */
+  color: #0f172a;         /* matches Tailwind's text-slate-900 */
 }

@@ -12,23 +12,25 @@ import AdminDashboard from './pages/AdminDashboard'
 import PropertyDetailPage from './pages/PropertyDetailPage'
 import ProfilePage from './pages/ProfilePage'
 import ChatPage from './pages/ChatPage'
+import AboutPage from './pages/AboutPage'       // 👈 NEW
 import SupportChatbot from './components/SupportChatbot'
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navbar />
       <Routes>
-        {}
+        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/verify-otp" element={<VerifyOtpPage />} />   {}
+        <Route path="/verify-otp" element={<VerifyOtpPage />} />
+        <Route path="/about" element={<AboutPage />} />   {/* 👈 NEW */}
         
-        {}
+        {/* Property Detail - Public */}
         <Route path="/property/:id" element={<PropertyDetailPage />} />
 
-        {}
+        {/* Protected Routes - Require Login */}
         <Route 
           path="/properties" 
           element={
@@ -46,7 +48,7 @@ function App() {
           } 
         />
         
-        {}
+        {/* Profile Route */}
         <Route 
           path="/profile" 
           element={
@@ -56,7 +58,7 @@ function App() {
           } 
         />
 
-        {}
+        {/* Chat Route */}
         <Route 
           path="/chat" 
           element={
@@ -66,7 +68,7 @@ function App() {
           } 
         />
         
-        {}
+        {/* Admin Route */}
         <Route 
           path="/admin" 
           element={
