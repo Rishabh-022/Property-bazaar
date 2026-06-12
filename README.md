@@ -101,7 +101,7 @@
 ### Conversation
 `_id`, `propertyId`, `participants[]` (ref: User), `lastMessage`, `lastMessageAt`, `unreadCount` (Map), timestamps
 
-###Payment Schema
+### Payment Schema
 `_id`, `property` (ref: Property), `user` (ref: User), `razorpay_order_id`, `razorpay_payment_id`, `razorpay_signature`, `amount`, `currency` (INR), `status` (created/paid/failed), `receipt`, timestamps
 
 
