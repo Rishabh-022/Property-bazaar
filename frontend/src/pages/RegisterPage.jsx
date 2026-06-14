@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Changed this import
 import { useTranslation } from 'react-i18next';
 
 const RegisterPage = () => {
@@ -52,7 +52,8 @@ const RegisterPage = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/users/register', formData);
+      // ✅ Updated this line to use your new API tool
+      const { data } = await API.post('/users/register', formData);
       navigate(`/verify-otp?email=${encodeURIComponent(data.email)}`);
     } catch (err) {
       setError(err.response?.data?.message || t('register.registrationFailed'));

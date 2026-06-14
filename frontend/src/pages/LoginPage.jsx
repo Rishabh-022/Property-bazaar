@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -53,7 +53,8 @@ const LoginPage = () => {
 
   const handleResendOTP = async () => {
     try {
-      await axios.post('http://localhost:5000/api/users/resend-otp', { email: unverifiedEmail });
+      // ✅ Removed localhost and used API
+      await API.post('/users/resend-otp', { email: unverifiedEmail });
       alert(t('login.otpResent'));
     } catch (err) {
       alert(err.response?.data?.message || t('login.otpFailed'));

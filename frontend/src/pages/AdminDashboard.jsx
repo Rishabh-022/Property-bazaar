@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -34,9 +34,8 @@ const AdminDashboard = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/admin/analytics', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Removed localhost and headers
+      const { data } = await API.get('/admin/analytics');
       setAnalytics(data.data);
     } catch (err) {
       console.error('Failed to fetch analytics:', err);
@@ -48,9 +47,8 @@ const AdminDashboard = () => {
   const fetchProperties = async () => {
     try {
       setLoadingProperties(true);
-      const { data } = await axios.get('http://localhost:5000/api/admin/properties', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Removed localhost and headers
+      const { data } = await API.get('/admin/properties');
       setPropertiesList(data.properties || []);
     } catch (err) {
       console.error('Failed to fetch properties:', err);
@@ -67,9 +65,8 @@ const AdminDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/properties/${id}/verify`, {}, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Removed localhost and headers
+      await API.put(`/admin/properties/${id}/verify`, {});
       alert('✅ Property approved!');
       fetchProperties();
       fetchAnalytics();
@@ -82,9 +79,8 @@ const AdminDashboard = () => {
     const reason = prompt('Enter rejection reason:');
     if (!reason) return;
     try {
-      await axios.put(`http://localhost:5000/api/admin/properties/${id}/reject`, { reason }, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Removed localhost and headers
+      await API.put(`/admin/properties/${id}/reject`, { reason });
       alert('❌ Property rejected');
       fetchProperties();
       fetchAnalytics();
@@ -96,9 +92,8 @@ const AdminDashboard = () => {
   const viewPropertyDetails = async (id) => {
     try {
       setLoadingDetail(true);
-      const { data } = await axios.get(`http://localhost:5000/api/admin/properties/${id}`, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Removed localhost and headers
+      const { data } = await API.get(`/admin/properties/${id}`);
       setSelectedProperty(data.property);
       setShowModal(true);
     } catch (err) {

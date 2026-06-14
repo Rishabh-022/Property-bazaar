@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Changed this import
 
 const SellPropertyPage = () => {
   const { user } = useAuth();
@@ -110,13 +110,14 @@ const SellPropertyPage = () => {
         submitData.append('images', file);
       });
 
-      const response = await axios.post(
-        'http://localhost:5000/api/properties',
+      // ✅ Updated this block to use the API utility
+      const response = await API.post(
+        '/properties',
         submitData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${user.token}`
+            // Token is now automatically handled by api.js
           }
         }
       );

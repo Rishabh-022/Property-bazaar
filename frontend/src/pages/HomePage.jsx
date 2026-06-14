@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Changed this import
 
 // ──────────────────────────────────────────────
 // Reusable animated background component
@@ -116,7 +116,8 @@ const HomePage = () => {
 
   const fetchFeaturedProperties = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/properties?limit=6&sort=newest');
+      // ✅ Updated this line to use your new API tool
+      const { data } = await API.get('/properties?limit=6&sort=newest');
       setFeaturedProperties(data.properties || []);
     } catch (err) {
       console.error('Failed to fetch featured properties:', err);

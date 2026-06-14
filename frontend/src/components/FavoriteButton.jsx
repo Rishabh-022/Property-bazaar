@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,9 +17,8 @@ const FavoriteButton = ({ propertyId, size = 'text-2xl' }) => {
 
     const checkFavoriteStatus = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/users/favorites', {
-                headers: { Authorization: `Bearer ${user.token}` }
-            });
+            // ✅ Removed localhost and headers
+            const { data } = await API.get('/users/favorites');
             const isFav = data.favorites.some(fav => fav._id === propertyId);
             setIsFavorite(isFav);
         } catch (err) {
@@ -38,11 +37,8 @@ const FavoriteButton = ({ propertyId, size = 'text-2xl' }) => {
 
         setLoading(true);
         try {
-            const { data } = await axios.post(
-                `http://localhost:5000/api/users/favorites/${propertyId}`,
-                {},
-                { headers: { Authorization: `Bearer ${user.token}` } }
-            );
+            // ✅ Removed localhost and headers
+            const { data } = await API.post(`/users/favorites/${propertyId}`);
             setIsFavorite(data.isFavorite);
         } catch (err) {
             console.error(err);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 import { motion } from 'framer-motion';
 
 const VerifyOtpPage = () => {
@@ -24,7 +24,8 @@ const VerifyOtpPage = () => {
         }
         setLoading(true);
         try {
-            const { data } = await axios.post('http://localhost:5000/api/users/verify-otp', { email, otp });
+            // ✅ Removed localhost and used API
+            const { data } = await API.post('/users/verify-otp', { email, otp });
             setSuccess(data.message);
             setTimeout(() => navigate('/login'), 2000);
         } catch (err) {
@@ -36,7 +37,8 @@ const VerifyOtpPage = () => {
 
     const handleResend = async () => {
         try {
-            await axios.post('http://localhost:5000/api/users/resend-otp', { email });
+            // ✅ Removed localhost and used API
+            await API.post('/users/resend-otp', { email });
             alert('OTP resent to your email');
         } catch (err) {
             alert(err.response?.data?.message || 'Failed to resend OTP');

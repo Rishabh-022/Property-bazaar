@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Changed this import
 import FavoriteButton from '../components/FavoriteButton';
 
 const BuyPropertyPage = () => {
@@ -27,7 +27,8 @@ const BuyPropertyPage = () => {
   const fetchProperties = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:5000/api/properties');
+      // ✅ Updated to use the new API instance
+      const { data } = await API.get('/properties');
       setProperties(data.properties || []);
     } catch (err) {
       setError('Failed to load properties');
@@ -40,7 +41,8 @@ const BuyPropertyPage = () => {
   const handleSearch = async () => {
     try {
       setLoading(true);
-      let url = 'http://localhost:5000/api/properties?';
+      // ✅ Removed the hardcoded localhost URL
+      let url = '/properties?';
       if (search) url += `city=${search}&`;
       if (filterType) url += `propertyType=${filterType}&`;
       if (filterPrice) {
@@ -55,7 +57,8 @@ const BuyPropertyPage = () => {
       if (filterFurnishing) url += `furnishing=${filterFurnishing}&`;
       if (filterPossession) url += `possessionStatus=${filterPossession}&`;
 
-      const { data } = await axios.get(url);
+      // ✅ Updated to use the new API instance
+      const { data } = await API.get(url);
       setProperties(data.properties || []);
     } catch (err) {
       console.error(err);

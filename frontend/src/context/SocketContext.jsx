@@ -14,7 +14,12 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      const newSocket = io('http://localhost:5000');
+      // Socket.io needs the root server URL, not the /api route
+      // VITE_API_URL looks like https://backend.onrender.com/api
+      // We strip the /api part so the connection goes to the server root
+      const serverUrl = import.meta.env.VITE_API_URL.replace('/api', '');
+      const newSocket = io(serverUrl);
+
       setSocket(newSocket);
 
       newSocket.emit('user-connect', user._id);

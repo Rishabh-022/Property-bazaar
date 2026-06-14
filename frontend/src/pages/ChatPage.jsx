@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -69,9 +69,8 @@ const ChatPage = () => {
 
   const fetchConversations = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/chat/conversations', {
-        headers: { Authorization: `Bearer ${user?.token}` },
-      });
+      // ✅ Removed localhost and headers
+      const { data } = await API.get('/chat/conversations');
       setConversations(data.conversations || []);
     } catch (err) {
       console.error('Failed to fetch conversations:', err);
@@ -86,10 +85,8 @@ const ChatPage = () => {
       const propId = conversation?.propertyId?._id || conversation?.propertyId;
       if (!propId) return;
 
-      const { data } = await axios.get(
-        `http://localhost:5000/api/chat/conversations/${propId}/messages`,
-        { headers: { Authorization: `Bearer ${user?.token}` } }
-      );
+      // ✅ Removed localhost and headers
+      const { data } = await API.get(`/chat/conversations/${propId}/messages`);
       setMessages(data.messages || []);
     } catch (err) {
       console.error('Failed to fetch messages:', err);
@@ -98,11 +95,11 @@ const ChatPage = () => {
 
   const initiateNewChat = async (propertyId, sellerId) => {
     try {
-      const { data } = await axios.post(
-        'http://localhost:5000/api/chat/conversations',
-        { propertyId, receiverId: sellerId },
-        { headers: { Authorization: `Bearer ${user?.token}` } }
-      );
+      // ✅ Removed localhost and headers
+      const { data } = await API.post('/chat/conversations', { 
+        propertyId, 
+        receiverId: sellerId 
+      });
       setActiveChat(data.conversation);
       fetchMessages(data.conversation);
       fetchConversations();
@@ -118,16 +115,13 @@ const ChatPage = () => {
     const receiverId = activeChat?.participants?.find((p) => p?._id !== user?._id)?._id;
 
     try {
-      const { data } = await axios.post(
-        'http://localhost:5000/api/chat/messages',
-        {
-          conversationId: activeChat?._id,
-          propertyId: activeChat?.propertyId?._id || activeChat?.propertyId,
-          receiverId,
-          message: newMessage,
-        },
-        { headers: { Authorization: `Bearer ${user?.token}` } }
-      );
+      // ✅ Removed localhost and headers
+      const { data } = await API.post('/chat/messages', {
+        conversationId: activeChat?._id,
+        propertyId: activeChat?.propertyId?._id || activeChat?.propertyId,
+        receiverId,
+        message: newMessage,
+      });
 
       socket.emit('send-message', {
         conversationId: activeChat?._id,

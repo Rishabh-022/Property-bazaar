@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 
 const SupportChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,8 @@ const SupportChatbot = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/chatbot', { query });
+      // ✅ Removed localhost and used API
+      const { data } = await API.post('/chatbot', { query });
       setMessages(prev => [...prev, { sender: 'bot', text: data.reply }]);
     } catch (err) {
       setMessages(prev => [...prev, { sender: 'bot', text: 'Sorry, something went wrong. Please try again.' }]);
@@ -54,7 +55,7 @@ const SupportChatbot = () => {
             <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-200 text-xl">&times;</button>
           </div>
 
-          {}
+          {/* Messages Area */}
           <div className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-3">
             {messages.map((msg, idx) => (
               <div
@@ -71,7 +72,7 @@ const SupportChatbot = () => {
             {loading && <div className="text-xs text-gray-400 italic">Thinking...</div>}
           </div>
 
-          {}
+          {/* Quick Options */}
           <div className="p-2 bg-white border-t border-gray-100 flex flex-wrap gap-1 overflow-y-auto max-h-24">
             {options.map((opt, idx) => (
               <button
@@ -84,7 +85,7 @@ const SupportChatbot = () => {
             ))}
           </div>
 
-          {}
+          {/* Input Area */}
           <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
             <input
               type="text"
@@ -104,7 +105,7 @@ const SupportChatbot = () => {
         </div>
       )}
 
-      {}
+      {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-blue-600 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-2xl transition transform hover:scale-110 ml-auto block"

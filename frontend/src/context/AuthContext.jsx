@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -17,7 +17,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await axios.post('http://localhost:5000/api/users/login', { email, password });
+    // ✅ Removed localhost and used API
+    const { data } = await API.post('/users/login', { email, password });
     const userData = { ...data.user, token: data.token };
     setUser(userData);
     localStorage.setItem('propertyBazzarUser', JSON.stringify(userData));
@@ -25,7 +26,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (formData) => {
-    const { data } = await axios.post('http://localhost:5000/api/users/register', formData);
+    // ✅ Removed localhost and used API
+    const { data } = await API.post('/users/register', formData);
     const userData = { ...data.user, token: data.token };
     setUser(userData);
     localStorage.setItem('propertyBazzarUser', JSON.stringify(userData));

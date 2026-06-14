@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Changed this import
 
 const ProfilePage = () => {
   const { user } = useAuth();
@@ -35,9 +35,8 @@ const ProfilePage = () => {
   const fetchMyProperties = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:5000/api/properties/my-listings', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Updated to use API, token is attached automatically!
+      const { data } = await API.get('/properties/my-listings');
       setMyProperties(data.properties || []);
     } catch (err) {
       console.error('Failed to fetch properties:', err);
@@ -49,9 +48,8 @@ const ProfilePage = () => {
   const fetchFavorites = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:5000/api/users/favorites', {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Updated to use API
+      const { data } = await API.get('/users/favorites');
       setFavorites(data.favorites || []);
     } catch (err) {
       console.error('Failed to fetch favorites:', err);
@@ -84,9 +82,8 @@ const ProfilePage = () => {
         updateData.password = formData.password;
       }
 
-      const { data } = await axios.put('http://localhost:5000/api/users/profile', updateData, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Updated to use API
+      const { data } = await API.put('/users/profile', updateData);
 
       const updatedUser = { ...user, ...data.user, token: data.token || user.token };
       localStorage.setItem('propertyBazzarUser', JSON.stringify(updatedUser));
@@ -105,9 +102,8 @@ const ProfilePage = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/properties/${propertyId}`, {
-        headers: { Authorization: `Bearer ${user.token}` }
-      });
+      // ✅ Updated to use API
+      await API.delete(`/properties/${propertyId}`);
       setMyProperties(myProperties.filter(p => p._id !== propertyId));
       alert(t('profile.deleteSuccess'));
     } catch (err) {

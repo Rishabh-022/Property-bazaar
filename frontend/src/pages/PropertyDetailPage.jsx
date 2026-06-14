@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import API from '../utils/api'; // ✅ Swapped axios for your API utility
 import { useAuth } from '../context/AuthContext';
 import StarRating from '../components/StarRating';
 import { FaWhatsapp, FaFacebook, FaTwitter, FaLink, FaShareAlt } from 'react-icons/fa';
@@ -100,7 +100,8 @@ const PropertyDetailPage = () => {
 
   const fetchPropertyDetails = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      // ✅ Removed localhost and used API
+      const { data } = await API.get(`/properties/${id}`);
       setProperty(data.property);
     } catch (err) {
       console.error('Failed to fetch property:', err);
@@ -111,7 +112,8 @@ const PropertyDetailPage = () => {
 
   const fetchReviews = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/properties/${property._id}/reviews`);
+      // ✅ Removed localhost and used API
+      const { data } = await API.get(`/properties/${property._id}/reviews`);
       setReviews(data.reviews || []);
     } catch (err) {
       console.error('Failed to fetch reviews:', err);
@@ -134,10 +136,10 @@ const PropertyDetailPage = () => {
     setReviewSuccess('');
 
     try {
-      const { data } = await axios.post(
-        `http://localhost:5000/api/properties/${property._id}/reviews`,
-        { rating: reviewRating, comment: reviewComment },
-        { headers: { Authorization: `Bearer ${user.token}` } }
+      // ✅ Removed localhost, used API, and removed manual headers
+      const { data } = await API.post(
+        `/properties/${property._id}/reviews`,
+        { rating: reviewRating, comment: reviewComment }
       );
       setReviews(prev => [data.review, ...prev]);
       setReviewRating(0);
@@ -165,11 +167,10 @@ const PropertyDetailPage = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/chat/conversations', {
+      // ✅ Removed localhost, used API, and removed manual headers
+      const { data } = await API.post('/chat/conversations', {
         propertyId: property._id,
         receiverId: property.owner?._id
-      }, {
-        headers: { Authorization: `Bearer ${user.token}` }
       });
       navigate('/chat');
     } catch (err) {
