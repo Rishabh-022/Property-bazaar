@@ -5,6 +5,74 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
+// ──────────────────────────────────────────────
+// Reusable animated background component
+// ──────────────────────────────────────────────
+const BubbleBackground = ({ theme }) => {
+  const bubbles = useMemo(() => {
+    return [...Array(12)].map((_, i) => {
+      let bgColor;
+      if (theme === 'blue') {
+        // White / transparent bubbles for dark blue backgrounds
+        bgColor =
+          i % 2 === 0
+            ? 'rgba(255, 255, 255, 0.15)'
+            : 'rgba(255, 255, 255, 0.05)';
+      } else if (theme === 'light') {
+        // Light blue bubbles for white / gray backgrounds
+        bgColor =
+          i % 2 === 0
+            ? 'rgba(59, 130, 246, 0.08)'
+            : 'rgba(147, 197, 253, 0.12)';
+      } else {
+        // Subtle slate bubbles for dark sections (footer, etc.)
+        bgColor =
+          i % 2 === 0
+            ? 'rgba(255, 255, 255, 0.03)'
+            : 'rgba(148, 163, 184, 0.05)';
+      }
+
+      return {
+        id: i,
+        size: Math.random() * 250 + 50,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        xDest: Math.random() * 100 - 50,
+        yDest: Math.random() * 100 - 50,
+        duration: Math.random() * 10 + 15,
+        bg: bgColor,
+      };
+    });
+  }, [theme]);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      {bubbles.map((bubble) => (
+        <motion.div
+          key={bubble.id}
+          className="absolute rounded-full"
+          style={{
+            width: bubble.size,
+            height: bubble.size,
+            background: bubble.bg,
+            left: bubble.left,
+            top: bubble.top,
+          }}
+          animate={{ x: [0, bubble.xDest, 0], y: [0, bubble.yDest, 0] }}
+          transition={{
+            duration: bubble.duration,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// ──────────────────────────────────────────────
+// HomePage Component
+// ──────────────────────────────────────────────
 const HomePage = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
@@ -12,31 +80,17 @@ const HomePage = () => {
     properties: 0,
     customers: 0,
     cities: 0,
-    experience: 0
+    experience: 0,
   });
 
   const [featuredProperties, setFeaturedProperties] = useState([]);
-
-  // Lock the random bubble values so they don't recalculate on every counter tick
-  const bubbles = useMemo(() => {
-    return [...Array(15)].map((_, i) => ({
-      id: i,
-      size: Math.random() * 300 + 50,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      xDest: Math.random() * 100 - 50,
-      yDest: Math.random() * 100 - 50,
-      duration: Math.random() * 10 + 10,
-      bg: i % 3 === 0 ? 'rgba(255, 255, 255, 0.3)' : i % 3 === 1 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.05)'
-    }));
-  }, []);
 
   useEffect(() => {
     const targets = { properties: 2500, customers: 15000, cities: 50, experience: 10 };
     const duration = 2000;
     const steps = 50;
     const interval = duration / steps;
-    
+
     let step = 0;
     const timer = setInterval(() => {
       step++;
@@ -44,15 +98,15 @@ const HomePage = () => {
         properties: Math.floor((targets.properties / steps) * step),
         customers: Math.floor((targets.customers / steps) * step),
         cities: Math.floor((targets.cities / steps) * step),
-        experience: Math.floor((targets.experience / steps) * step)
+        experience: Math.floor((targets.experience / steps) * step),
       });
-      
+
       if (step >= steps) {
         setCounters(targets);
         clearInterval(timer);
       }
     }, interval);
-    
+
     return () => clearInterval(timer);
   }, []);
 
@@ -78,38 +132,13 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      
-      {/* HERO SECTION */}
+      {/* ============ HERO SECTION (blue background) ============ */}
       <section className="relative min-h-screen flex items-center overflow-hidden bg-blue-600">
-        {/* Animated floating circles (Fixed speed) */}
-        {bubbles.map((bubble) => (
-          <motion.div
-            key={bubble.id}
-            className="absolute rounded-full"
-            style={{
-              width: bubble.size,
-              height: bubble.size,
-              background: bubble.bg,
-              left: bubble.left,
-              top: bubble.top,
-            }}
-            animate={{
-              x: [0, bubble.xDest, 0],
-              y: [0, bubble.yDest, 0],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: bubble.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        <BubbleBackground theme="blue" />
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
           <div className="flex flex-col-reverse xl:grid xl:grid-cols-2 gap-12 items-center">
-            
             {/* Left Column - Text */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -130,7 +159,7 @@ const HomePage = () => {
               <h1 className="text-5xl lg:text-7xl font-bold font-display text-white mb-6 leading-tight">
                 {t('home.heroTitle')}
               </h1>
-              
+
               <p className="text-lg text-blue-100 mb-8 max-w-xl leading-relaxed">
                 {t('home.heroSubtitle')}
               </p>
@@ -158,7 +187,7 @@ const HomePage = () => {
                     </motion.button>
                   </Link>
                 )}
-                
+
                 {user ? (
                   <Link to="/sell">
                     <motion.button
@@ -212,7 +241,7 @@ const HomePage = () => {
               {featuredProperties.length > 0 ? (
                 <motion.div
                   animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                   className="bg-white rounded-3xl shadow-2xl p-6 relative z-10 border border-gray-100"
                 >
                   {/* Dynamic Image */}
@@ -250,10 +279,14 @@ const HomePage = () => {
                       {featuredProperties[0].title}
                     </h3>
                     <p className="text-gray-500 text-sm flex items-center gap-1">
-                      📍 {featuredProperties[0].address?.city}, {featuredProperties[0].address?.state}
+                      📍 {featuredProperties[0].address?.city},{' '}
+                      {featuredProperties[0].address?.state}
                     </p>
                     <div className="flex gap-4 text-sm text-gray-600 font-medium pt-3 border-t border-gray-100">
-                      <span>📐 {featuredProperties[0].dimensions?.area} {featuredProperties[0].dimensions?.areaUnit}</span>
+                      <span>
+                        📐 {featuredProperties[0].dimensions?.area}{' '}
+                        {featuredProperties[0].dimensions?.areaUnit}
+                      </span>
                     </div>
 
                     <Link
@@ -275,7 +308,7 @@ const HomePage = () => {
 
               <motion.div
                 animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                 className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3 z-20 border border-gray-100 hidden md:flex"
               >
                 <span className="text-3xl">⭐</span>
@@ -289,16 +322,19 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ============ FEATURES SECTION ============ */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* ============ FEATURES SECTION (white background) ============ */}
+      <section className="relative py-24 bg-white overflow-hidden">
+        <BubbleBackground theme="light" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">{t('home.whyUs')}</span>
+            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">
+              {t('home.whyUs')}
+            </span>
             <h2 className="text-4xl lg:text-5xl font-bold font-display text-blue-950 mt-4 mb-6">
               {t('home.smartWay')}
             </h2>
@@ -315,7 +351,7 @@ const HomePage = () => {
                 desc: t('home.verifiedDocDesc'),
                 color: 'border-l-green-500',
                 bg: 'bg-green-50',
-                textColor: 'text-green-700'
+                textColor: 'text-green-700',
               },
               {
                 icon: '💰',
@@ -323,7 +359,7 @@ const HomePage = () => {
                 desc: t('home.bestPriceDesc'),
                 color: 'border-l-blue-500',
                 bg: 'bg-blue-50',
-                textColor: 'text-blue-700'
+                textColor: 'text-blue-700',
               },
               {
                 icon: '⚡',
@@ -331,7 +367,7 @@ const HomePage = () => {
                 desc: t('home.fastSecureDesc'),
                 color: 'border-l-red-500',
                 bg: 'bg-red-50',
-                textColor: 'text-red-700'
+                textColor: 'text-red-700',
               },
             ].map((feature, i) => (
               <motion.div
@@ -343,10 +379,14 @@ const HomePage = () => {
                 whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
                 className={`bg-white rounded-2xl p-8 border-l-4 ${feature.color} shadow-lg hover:shadow-xl transition-all duration-300`}
               >
-                <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center text-2xl mb-6`}>
+                <div
+                  className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center text-2xl mb-6`}
+                >
                   {feature.icon}
                 </div>
-                <h3 className={`text-xl font-bold ${feature.textColor} mb-3`}>{feature.title}</h3>
+                <h3 className={`text-xl font-bold ${feature.textColor} mb-3`}>
+                  {feature.title}
+                </h3>
                 <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
@@ -354,10 +394,11 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ============ FEATURED PROPERTIES SECTION ============ */}
+      {/* ============ FEATURED PROPERTIES SECTION (gray background) ============ */}
       {featuredProperties.length > 0 && (
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <section className="relative py-24 bg-gray-50 overflow-hidden">
+          <BubbleBackground theme="light" />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -388,21 +429,21 @@ const HomePage = () => {
                 >
                   <div className="relative h-52 bg-blue-500 flex items-center justify-center overflow-hidden">
                     {property.images && property.images.length > 0 ? (
-                      <img 
-                        src={property.images[0].url} 
+                      <img
+                        src={property.images[0].url}
                         alt={property.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                     ) : (
                       <span className="text-6xl">🏠</span>
                     )}
-                    
+
                     <div className="absolute top-4 left-4">
                       <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
                         ✅ {t('home.verifiedBadge')}
                       </span>
                     </div>
-                    
+
                     <div className="absolute bottom-4 right-4">
                       <span className="bg-white/90 backdrop-blur-sm text-blue-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                         {formatPrice(property.pricing?.expectedPrice)}
@@ -412,16 +453,18 @@ const HomePage = () => {
 
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-bold text-blue-950 line-clamp-1">{property.title}</h3>
+                      <h3 className="text-lg font-bold text-blue-950 line-clamp-1">
+                        {property.title}
+                      </h3>
                       <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap ml-2">
                         {property.propertyType}
                       </span>
                     </div>
-                    
+
                     <p className="text-gray-500 text-sm mb-4 flex items-center gap-1">
                       📍 {property.address?.city}, {property.address?.state}
                     </p>
-                    
+
                     <div className="flex gap-4 mb-4 text-sm text-gray-600">
                       <span className="flex items-center gap-1">
                         📐 {property.dimensions?.area} {property.dimensions?.areaUnit}
@@ -429,7 +472,7 @@ const HomePage = () => {
                     </div>
 
                     {user ? (
-                      <Link 
+                      <Link
                         to={`/property/${property._id}`}
                         className="block w-full py-3 bg-blue-600 text-white rounded-xl font-bold text-center hover:bg-blue-700 transition-all shadow-md"
                       >
@@ -437,7 +480,7 @@ const HomePage = () => {
                       </Link>
                     ) : (
                       <div className="text-center">
-                        <Link 
+                        <Link
                           to="/login"
                           className="block w-full py-3 bg-blue-600 text-white rounded-xl font-bold text-center hover:bg-blue-700 transition-all shadow-md"
                         >
@@ -452,7 +495,7 @@ const HomePage = () => {
                 </motion.div>
               ))}
             </div>
-            
+
             <div className="text-center mt-12">
               {user ? (
                 <Link to="/properties">
@@ -480,9 +523,10 @@ const HomePage = () => {
         </section>
       )}
 
-      {/* ============ CTA SECTION ============ */}
-      <section className="py-24 bg-blue-600">
-        <div className="max-w-4xl mx-auto text-center px-6">
+      {/* ============ CTA SECTION (blue background) ============ */}
+      <section className="relative py-24 bg-blue-600 overflow-hidden">
+        <BubbleBackground theme="blue" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -494,7 +538,7 @@ const HomePage = () => {
             <p className="text-blue-100 text-lg mb-8">
               {t('home.ctaDesc')}
             </p>
-            <Link to={user ? "/properties" : "/register"}>
+            <Link to={user ? '/properties' : '/register'}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
