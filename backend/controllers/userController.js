@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 const otpEmailTemplate = require('../utils/otpEmail');
-const transporter = require('../config/email');
+const sendEmail = require('../config/email');   // <-- now uses Resend, not Nodemailer
 
 const registerUser = async (req, res) => {
     try {
@@ -44,16 +44,14 @@ const registerUser = async (req, res) => {
 
         console.log(`👤 New user created: ${email} (${user._id}) with OTP: ${otp}`);
 
-        // Send OTP email
+        // Send OTP email using Resend
         try {
-            const info = await transporter.sendMail({
-                from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
+            await sendEmail({
                 to: email,
                 subject: 'Verify your email - OTP',
                 html: otpEmailTemplate(fullName, otp)
             });
             console.log(`✅ OTP sent to: ${email}`);
-            console.log(`📨 Message ID: ${info.messageId}`);
         } catch (emailErr) {
             console.error('❌ Failed to send OTP:', emailErr);
             return res.status(500).json({ 
@@ -126,14 +124,12 @@ const resendOTP = async (req, res) => {
         await user.save();
 
         try {
-            const info = await transporter.sendMail({
-                from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
+            await sendEmail({
                 to: email,
                 subject: 'Your new OTP for PropertyBazzar',
                 html: otpEmailTemplate(user.fullName, otp)
             });
             console.log(`✅ OTP resent to: ${email}`);
-            console.log(`📨 Message ID: ${info.messageId}`);
             res.json({ success: true, message: 'OTP resent successfully' });
         } catch (emailErr) {
             console.error('❌ Failed to resend OTP:', emailErr);
