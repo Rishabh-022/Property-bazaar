@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@getbrevo/brevo": "^5.0.4",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.3",
     "compromise": "^14.15.0",
@@ -30,7 +31,6 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^8.0.7",
     "pdfkit": "^0.18.0",
-    "resend": "^6.12.4",
     "sharp": "^0.34.5",
     "socket.io": "^4.8.3"
   },
