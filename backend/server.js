@@ -16,16 +16,35 @@ console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'URI is loaded ✓' : 'Not
 const app = express();
 const server = http.createServer(app);
 
+// -----------------------------------------------------------
+// ALLOWED ORIGINS (local development + production)
+// -----------------------------------------------------------
+const allowedOrigins = [
+    'http://localhost:5173',                          // local Vite dev server
+    'https://property-bazaar-indol.vercel.app'        // your live Vercel site
+];
+
+// -----------------------------------------------------------
+// SOCKET.IO CORS
+// -----------------------------------------------------------
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:5173',
-        methods: ['GET', 'POST']
+        origin: allowedOrigins,
+        methods: ['GET', 'POST'],
+        credentials: true
     }
 });
 
 app.set('io', io);
 
-app.use(cors());
+// -----------------------------------------------------------
+// EXPRESS CORS (for normal HTTP requests)
+// -----------------------------------------------------------
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -35,7 +54,9 @@ if (!fs.existsSync(uploadsDir)) {
     console.log('📁 Uploads folder created');
 }
 
-
+// -----------------------------------------------------------
+// ROUTES
+// -----------------------------------------------------------
 app.get('/', (req, res) => {
     res.json({ 
         success: true,
@@ -61,8 +82,11 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/properties', require('./routes/propertyRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
-app.use('/api/chatbot', require('./routes/chatbotRoutes')); 
+app.use('/api/chatbot', require('./routes/chatbotRoutes'));
 
+// -----------------------------------------------------------
+// SOCKET.IO LOGIC
+// -----------------------------------------------------------
 const onlineUsers = new Map();
 
 io.on('connection', (socket) => {
@@ -123,6 +147,9 @@ io.on('connection', (socket) => {
     });
 });
 
+// -----------------------------------------------------------
+// ERROR HANDLING
+// -----------------------------------------------------------
 app.use((req, res) => {
     res.status(404).json({
         success: false,
@@ -139,6 +166,9 @@ app.use((err, req, res, next) => {
     });
 });
 
+// -----------------------------------------------------------
+// DATABASE & SERVER
+// -----------------------------------------------------------
 console.log('🔄 Connecting to MongoDB Atlas...');
 mongoose.connect(process.env.MONGODB_URI)
     .then((conn) => {
