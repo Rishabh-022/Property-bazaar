@@ -1,9 +1,11 @@
 const Property = require('../models/Property');
 const User = require('../models/User');
-const moment = require('moment'); // <-- make sure moment is installed
+const moment = require('moment');
 const generatePropertyReport = require('../utils/generatePropertyReport');
 const cloudinary = require('../config/cloudinary');
-const transporter = require('../config/email');
+// ❌ OLD: const transporter = require('../config/email');
+// ✅ NEW: use the sendEmail function
+const sendEmail = require('../config/email');
 const { propertyApprovedEmail, propertyRejectedEmail } = require('../utils/emailTemplates');
 
 const getDashboardStats = async (req, res) => {
@@ -78,7 +80,7 @@ const getPropertyDetails = async (req, res) => {
     try {
         const property = await Property.findById(req.params.id)
             .populate('owner', 'fullName email phone aadhaarNumber')
-            .populate('statusHistory.changedBy', 'fullName');   // NEW: populate the admin name
+            .populate('statusHistory.changedBy', 'fullName');
 
         if (!property) {
             return res.status(404).json({
@@ -122,7 +124,6 @@ const verifyProperty = async (req, res) => {
         property.verifiedAt = Date.now();
         property.verifiedBy = req.user._id;
 
-        // ---- NEW: record in statusHistory ----
         property.statusHistory.push({
             status: 'Active',
             changedBy: req.user._id,
@@ -132,6 +133,7 @@ const verifyProperty = async (req, res) => {
 
         await property.save();
 
+        // Generate PDF (optional)
         let pdfBuffer;
         try {
             pdfBuffer = await generatePropertyReport(property);
@@ -139,33 +141,37 @@ const verifyProperty = async (req, res) => {
             console.error('Failed to generate PDF:', pdfErr);
         }
 
+        // Send approval email using the new sendEmail function
         if (property.owner && property.owner.email) {
             try {
-                const mailOptions = {
-                    from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
+                const emailHtml = propertyApprovedEmail(
+                    property.owner.fullName,
+                    property.title,
+                    property._id
+                );
+
+                // Prepare attachments if PDF exists
+                const attachments = pdfBuffer
+                    ? [
+                          {
+                              filename: `Property-Report-${property.registrationNumber}.pdf`,
+                              content: pdfBuffer.toString('base64'),  // Brevo expects base64
+                              type: 'application/pdf'
+                          }
+                      ]
+                    : undefined;
+
+                await sendEmail({
                     to: property.owner.email,
                     subject: '🎉 Your Property Has Been Approved!',
-                    html: propertyApprovedEmail(
-                        property.owner.fullName,
-                        property.title,
-                        property._id
-                    ),
-                };
+                    html: emailHtml,
+                    attachments: attachments      // <-- passed to the email function
+                });
 
-                if (pdfBuffer) {
-                    mailOptions.attachments = [
-                        {
-                            filename: `Property-Report-${property.registrationNumber}.pdf`,
-                            content: pdfBuffer,
-                            contentType: 'application/pdf'
-                        }
-                    ];
-                }
-
-                await transporter.sendMail(mailOptions);
-                console.log('✅ Approval email sent to:', property.owner.email, pdfBuffer ? '(with PDF)' : '');
+                console.log('✅ Approval email sent to:', property.owner.email);
             } catch (emailErr) {
                 console.error('Failed to send approval email:', emailErr.message);
+                // Don't fail the request if email fails
             }
         }
 
@@ -201,7 +207,6 @@ const rejectProperty = async (req, res) => {
         property.rejectedAt = Date.now();
         property.rejectedBy = req.user._id;
 
-        // ---- NEW: record in statusHistory ----
         property.statusHistory.push({
             status: 'Rejected',
             changedBy: req.user._id,
@@ -213,15 +218,16 @@ const rejectProperty = async (req, res) => {
 
         if (property.owner && property.owner.email) {
             try {
-                await transporter.sendMail({
-                    from: `"PropertyBazzar" <${process.env.EMAIL_USER}>`,
+                const emailHtml = propertyRejectedEmail(
+                    property.owner.fullName,
+                    property.title,
+                    reason
+                );
+
+                await sendEmail({
                     to: property.owner.email,
                     subject: '⚠️ Your Property Needs Revision',
-                    html: propertyRejectedEmail(
-                        property.owner.fullName,
-                        property.title,
-                        reason
-                    )
+                    html: emailHtml
                 });
                 console.log('✅ Rejection email sent to:', property.owner.email);
             } catch (emailErr) {
