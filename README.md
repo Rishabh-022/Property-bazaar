@@ -136,7 +136,6 @@ graph TD
 
 ### Phase 6 – Getting Started (Local Setup)
 
-```markdown
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -150,14 +149,14 @@ graph TD
 ```bash
 git clone https://github.com/your-username/property-bazzar.git
 cd property-bazzar
-
+```
 2. Backend
 ```bash
 cd backend
 npm install
-
+```
 Create .env:
-
+```env
 PORT=5000
 MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/property-bazzar
 JWT_SECRET=your_jwt_secret
@@ -169,19 +168,23 @@ EMAIL_PASS=your_app_password
 GEMINI_API_KEY=... (optional)
 RAZORPAY_KEY_ID=... (optional)
 RAZORPAY_KEY_SECRET=... (optional)
+
+```
 Start: npm run dev
 
-3. Frontend
+### 3. Frontend
+```bash
 cd ../frontend
 npm install
+```
 Create .env:
 
-env
+```env
 VITE_GOOGLE_MAPS_API_KEY=your_google_maps_key
 Start: npm run dev → open http://localhost:5173
 
-4.  Admin User
-bash
+### 4. Admin User
+```bash
 cd backend
 node createAdmin.js
 Email: admin@propertybazzar.com
@@ -192,7 +195,6 @@ Password: Admin@123
 
 ### Phase 7 – Project Structure (File Tree)
 
-```markdown
 ## 📁 Project Structure
 property-bazzar/
 ├── backend/
@@ -279,6 +281,8 @@ property-bazzar/
 │   └── chat-dark.png
 ├── .gitignore
 └── README.md
+
+```
 
 ```
 ## 🤝 Contributing
