@@ -1,860 +1,674 @@
-# 🩺 AI-Powered Diabetes Risk Predictor & Patient Portal
 
-<div align="center">
+# 🏡 Property Bazzar
 
-**An AI-powered health risk screening platform using Machine Learning, FastAPI, React, and Node.js.**
+### Discover. List. Connect. Find your place.
 
-![React](https://img.shields.io/badge/React-19.2-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Node.js](https://img.shields.io/badge/Node.js-22.x-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3.14-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115-005571?style=for-the-badge&logo=fastapi)
-![MongoDB](https://img.shields.io/badge/MongoDB-8.0-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
-![Scikit-learn](https://img.shields.io/badge/scikit--learn-1.8-FF6F00?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![Electron](https://img.shields.io/badge/Electron-41.4-47848F?style=for-the-badge&logo=electron&logoColor=white)
+A full-stack real-estate marketplace that brings property discovery,
+seller-buyer communication, document-led listing review, and property
+management into one platform.
 
-</div>
 
----
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=20232A)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-Express-339933?logo=nodedotjs&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)
+![Socket.IO](https://img.shields.io/badge/Realtime-Socket.IO-010101?logo=socketdotio)
+![Cloudinary](https://img.shields.io/badge/Media-Cloudinary-3448C5?logo=cloudinary&logoColor=white)
+:::
 
-## 📖 Table of Contents
+------------------------------------------------------------------------
 
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-- [System Architecture](#-system-architecture)
-- [End-to-End Workflow](#-end-to-end-workflow)
-- [Machine Learning Pipeline](#-machine-learning-pipeline)
-- [Technology Stack](#-technology-stack)
-- [Project Structure](#-project-structure)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Running the Application](#-running-the-application)
-- [Building the Desktop Application](#-building-the-desktop-application)
-- [API Documentation](#-api-documentation)
-- [Test Cases](#-test-cases)
-- [Security and Privacy](#-security-and-privacy)
-- [Troubleshooting](#-troubleshooting)
-- [Limitations and Future Improvements](#-limitations-and-future-improvements)
-- [Author](#-author)
-- [License](#-license)
+## 📌 Table of Contents
 
----
+-   [Overview](#-overview)
+-   [What Makes It Useful](#-what-makes-it-useful)
+-   [Feature Highlights](#-feature-highlights)
+-   [Application Architecture](#-application-architecture)
+-   [Core Workflows](#-core-workflows)
+-   [Technology Stack](#-technology-stack)
+-   [Project Structure](#-project-structure)
+-   [Data Models](#-data-models)
+-   [Getting Started](#-getting-started)
+-   [Environment Variables](#-environment-variables)
+-   [Available Scripts](#-available-scripts)
+-   [API Route Groups](#-api-route-groups)
+-   [Deployment Notes](#-deployment-notes)
+-   [Security Notes](#-security-notes)
+-   [Roadmap](#-roadmap)
 
-## 🎯 Overview
+------------------------------------------------------------------------
 
-**AI Health Risk Tracker** is a full-stack health risk screening application that estimates a user's diabetes risk using a Machine Learning model trained on the CDC's Behavioral Risk Factor Surveillance System (BRFSS) dataset.
+## 🌟 Overview
 
-The project uses a microservice architecture consisting of:
+**Property Bazzar** is a full-stack real-estate marketplace built to
+simplify the way people discover and list properties. Buyers can explore
+available listings, save favourites, review properties, view location
+information, and contact sellers. Sellers can create and manage listings
+with property details and supporting documents. Administrators can
+review submissions, approve or reject listings, and monitor platform
+activity.
 
-- **React + Vite:** Interactive frontend and patient portal.
-- **Node.js + Express:** Main backend, database operations, and notification handling.
-- **Python + FastAPI:** Independent Machine Learning prediction service.
-- **MongoDB Atlas:** Cloud-based patient record storage.
-- **Electron:** Desktop application packaging.
+The application uses a **React + Vite frontend**, a **Node.js + Express
+REST API**, **MongoDB Atlas** for persistent data, **Cloudinary** for
+property images, and **Socket.IO** for real-time messaging.
 
-The model uses Logistic Regression to generate a diabetes risk estimate based on health and lifestyle information.
+> The project includes a document-informed admin review workflow.
+> Platform review should not be interpreted as a legal title guarantee
+> or independent government verification.
 
-When the predicted risk exceeds the configured threshold of 50%, the backend can trigger a WhatsApp notification. Email notifications can also be configured.
+## ✨ What Makes It Useful
 
-### Key Innovation: Explainable Machine Learning
+-   A single place for property discovery and listing management.
+-   Structured property information, including registration and
+    land-record fields.
+-   An admin approval workflow before listings become active.
+-   Direct buyer--seller conversations with real-time updates.
+-   Cloud-hosted property images.
+-   English and Hindi interface translations.
+-   Responsive interface with light/dark theme support.
+-   AI-assisted support responses through the Groq API.
 
-The project uses Logistic Regression, a model whose coefficients can be examined to understand how input features influence its predictions.
+## 🚀 Feature Highlights
 
-This makes the model more interpretable than many complex black-box approaches.
+  -----------------------------------------------------------------------
+  Area                                Capabilities
+  ----------------------------------- -----------------------------------
+  👤 Accounts                         Registration, email OTP
+                                      verification, login, JWT-based
+                                      protected routes, profile
+                                      management
 
-However, model coefficients do not independently establish medical causation. The risk estimate should be treated as an informational screening result rather than a clinical diagnosis.
+  🏘️ Listings                         Create, edit, view, and delete
+                                      property listings; multiple images;
+                                      property type, area, address,
+                                      pricing and amenities
 
-### Dataset
+  📑 Property details                 Registration number, Khata, Khasra,
+                                      survey number, RERA ID (optional),
+                                      ownership type and seller
+                                      information
 
-| Attribute | Details |
-|---|---|
-| Dataset | CDC BRFSS 2015 |
-| Source | CDC Behavioral Risk Factor Surveillance System |
-| Repository identifier mentioned in original implementation | UCI Dataset ID: 891 |
-| Number of records | 253,680 |
-| Learning algorithm | Logistic Regression |
-| Class balancing | SMOTE, as described in the project |
-| Prediction output | Risk percentage |
+  🔎 Discovery                        Browse listings, search/filter and
+                                      view property details
 
-Dataset source: [UCI Machine Learning Repository](https://archive.ics.uci.edu/)
+  ☁️ Image handling                   Upload property photos to
+                                      Cloudinary; manage uploaded images
 
----
+  🛡️ Admin review                     Dashboard statistics, listing
+                                      review, approval/rejection, status
+                                      history and email updates
 
-## ✨ Key Features
+  📄 PDF reports                      Generate a property report during
+                                      the approval workflow and attach it
+                                      to the approval email when
+                                      generation succeeds
 
-### 🧠 Machine Learning
+  💬 Messaging                        Buyer--seller conversations,
+                                      message history, online status,
+                                      typing events and notifications
+                                      using Socket.IO
 
-- Diabetes risk prediction using Logistic Regression.
-- Prediction through a dedicated Python FastAPI service.
-- Risk percentage returned to the backend.
-- Model training using the BRFSS dataset.
-- SMOTE-based class balancing, as configured in the ML pipeline.
-- Interpretable model coefficients.
+  ❤️ Favourites                       Save/unsave properties and view
+                                      saved listings
 
-### 👨‍⚕️ Patient Portal
+  ⭐ Reviews                          Submit ratings and comments;
+                                      display property reviews
 
-- Health questionnaire.
-- BMI and lifestyle-related inputs.
-- Health risk result visualization.
-- Animated risk meter.
-- Color-coded risk indicator.
-- Patient record storage in MongoDB.
+  🤖 Support chatbot                  Property Bazzar support assistant
+                                      powered by Groq (Llama 3.1 8B
+                                      Instant), with a fallback response
 
-### 📲 Automated Notifications
+  🗺️ Maps                             Google Maps integration for
+                                      property location display
 
-- WhatsApp notifications using `whatsapp-web.js`.
-- QR-code-based WhatsApp authentication.
-- Automatic alert when the configured risk threshold is exceeded.
-- Optional email notifications using Nodemailer.
+  🌐 Internationalisation             English and Hindi translations
+                                      using i18next
 
-### 🖥️ User Interface
+  🎨 Experience                       Responsive UI, dark/light theme,
+                                      Framer Motion animations and
+                                      reusable components
 
-- React-based responsive interface.
-- Blue-and-white medical theme.
-- Animated risk meter.
-- Risk indicators.
-- Responsive desktop and mobile layouts.
+  📊 Admin analytics                  Property status/type summaries,
+                                      monthly listings, city and price
+                                      distribution metrics
+  -----------------------------------------------------------------------
 
-### 🖥️ Desktop Application
+**Implementation note:** Razorpay checkout and Gemini-generated listing
+descriptions are not present in the supplied codebase's active
+dependencies/routes. They are therefore not described as implemented
+features here.
 
-- Electron integration.
-- Windows executable packaging.
-- Dedicated application icon.
-- Desktop installation build.
+## 🏗️ Application Architecture
 
----
+The application follows a client--server architecture. The frontend
+communicates with Express through HTTP requests for standard operations
+and Socket.IO for live messaging events.
 
-## 🏗️ System Architecture
-
-The application follows a **three-service architecture**. Each service has a separate responsibility, allowing the frontend, business logic, and ML prediction engine to operate independently.
-
-```mermaid
+``` mermaid
 flowchart TB
-    U["Patient / User"]
-
-    subgraph FRONTEND["Frontend — React + Vite"]
-        A["React Application"]
-        B["Health Questionnaire"]
-        C["Risk Result Dashboard"]
-        D["Axios HTTP Client"]
-
-        A --> B
-        A --> C
-        B --> D
-    end
-
-    subgraph BACKEND["Backend — Node.js + Express"]
-        E["Express API"]
-        F["Request Validation"]
-        G["Prediction Controller"]
-        H["Notification Service"]
-        I["Database Controller"]
-
-        E --> F
-        F --> G
-        G --> H
-        G --> I
-    end
-
-    subgraph ML["Machine Learning Service — Python + FastAPI"]
-        J["FastAPI Endpoint"]
-        K["Input Preprocessing"]
-        L["Logistic Regression Model"]
-        M["Risk Percentage"]
-
-        J --> K
-        K --> L
-        L --> M
-    end
-
-    DB[("MongoDB Atlas")]
-    WA["WhatsApp Notification"]
-    MAIL["Email Notification"]
-
-    U --> A
-    D -->|"HTTP JSON"| E
-    G -->|"POST /predict-risk"| J
-    M -->|"Prediction JSON"| G
-    I <-->|"Mongoose"| DB
-    H --> WA
-    H --> MAIL
+    U["👥 User / Admin"] --> FE["React Frontend<br/>Vite · React Router"]
+    FE --> CTX["Context Providers<br/>Auth · Theme · Socket"]
+    CTX --> HTTP["Axios API Requests"]
+    CTX <--> WS["Socket.IO Client"]
+    HTTP --> API["Express REST API"]
+    WS <--> IO["Socket.IO Server"]
+    API --> MW["Middleware<br/>JWT Auth · Upload"]
+    MW --> CTRL["Controllers<br/>Users · Properties · Admin<br/>Chat · Reviews · Favourites"]
+    CTRL --> DB[("MongoDB Atlas<br/>Mongoose Models")]
+    CTRL --> CL["Cloudinary<br/>Property Images"]
+    CTRL --> MAIL["Brevo Email API<br/>OTP · Status Updates"]
+    CTRL --> PDF["PDFKit<br/>Property Report"]
+    API --> GROQ["Groq API<br/>Support Chatbot"]
+    IO <--> WS
+    FE -. "Maps display" .-> MAP["Google Maps API"]
 ```
 
-### Responsibilities of Each Service
+### Architectural responsibilities
 
-| Service | Technology | Responsibility |
-|---|---|---|
-| Frontend | React, Vite | Collect health information and display results |
-| Backend | Node.js, Express | Handle requests, database operations, and notifications |
-| ML API | Python, FastAPI | Preprocess input and generate diabetes risk predictions |
-| Database | MongoDB Atlas | Store patient and prediction records |
-| Notification | whatsapp-web.js | Send WhatsApp alerts |
-| Email | Nodemailer | Send optional email notifications |
-| Desktop | Electron | Package the frontend as a Windows application |
+  -----------------------------------------------------------------------
+  Layer                               Responsibility
+  ----------------------------------- -----------------------------------
+  **React frontend**                  Renders pages and components,
+                                      manages navigation and user
+                                      interactions
 
----
+  **Context providers**               Shares authentication, theme and
+                                      socket connection state across the
+                                      UI
 
-## 🔄 End-to-End Workflow
+  **Axios API utility**               Centralises frontend HTTP
+                                      communication with the backend
 
-The following diagram represents the complete prediction lifecycle.
+  **Express API**                     Exposes REST endpoints and
+                                      coordinates application operations
 
-```mermaid
+  **Middleware**                      Handles
+                                      authentication/authorisation checks
+                                      and file-upload processing
+
+  **Controllers**                     Contains business logic for users,
+                                      properties, admin actions, chat,
+                                      reviews and favourites
+
+  **Mongoose models**                 Defines MongoDB document structures
+                                      and relationships
+
+  **External services**               Cloudinary stores images, Brevo
+                                      sends emails, Groq powers support
+                                      responses, and Google Maps displays
+                                      location information
+
+  **Socket.IO**                       Handles live chat events, typing
+                                      indicators and online/offline
+                                      notifications
+  -----------------------------------------------------------------------
+
+## 🔄 Core Workflows
+
+### 1. Account registration and verification
+
+``` mermaid
+sequenceDiagram
+    actor User
+    participant UI as React UI
+    participant API as Express API
+    participant DB as MongoDB
+    participant Email as Brevo Email API
+
+    User->>UI: Submit registration details
+    UI->>API: POST /api/users/register
+    API->>DB: Create user and OTP details
+    API->>Email: Send email OTP
+    API-->>UI: Registration response
+    User->>UI: Enter OTP
+    UI->>API: Submit OTP
+    API->>DB: Verify OTP and update account
+    API-->>UI: Verification result
+```
+
+### 2. Property listing and media upload
+
+``` mermaid
 flowchart TD
-    A["User opens application"] --> B["Fills health questionnaire"]
-    B --> C["Submits health information"]
-    C --> D["React sends POST /api/calculate-risk"]
+    A["Seller opens Sell Property"] --> B["Enters property and ownership details"]
+    B --> C["Selects property images"]
+    C --> D["Frontend sends listing request"]
     D --> E["Express validates request"]
-    E --> F["Express forwards input to FastAPI"]
-    F --> G["ML preprocessing"]
-    G --> H["Logistic Regression prediction"]
-    H --> I["Calculate risk percentage"]
-    I --> J["Return prediction to Express"]
-    J --> K["Save prediction in MongoDB"]
-    K --> L{"Risk greater than 50%?"}
-    L -->|Yes| M["Trigger WhatsApp notification"]
-    L -->|No| N["No high-risk notification"]
-    M --> O["Return response to React"]
-    N --> O
-    O --> P["Display risk meter and result"]
+    E --> F["Upload middleware processes files"]
+    F --> G["Images uploaded to Cloudinary"]
+    G --> H["Property document saved in MongoDB"]
+    H --> I["Listing receives Pending status"]
+    I --> J["Seller can track listing status"]
 ```
 
-### Request Lifecycle
+### 3. Admin approval or rejection
 
-1. The user enters health information in the React interface.
-2. React sends the information to the Node.js backend.
-3. Express validates the request.
-4. Express forwards the data to the Python prediction service.
-5. FastAPI prepares the input for the trained ML model.
-6. Logistic Regression calculates the prediction probability.
-7. FastAPI returns the estimated risk percentage.
-8. Express stores the prediction in MongoDB.
-9. If the result exceeds 50%, the notification service can trigger a WhatsApp alert.
-10. Express returns the final result to React.
-11. React displays the risk percentage using an animated visualization.
-
----
-
-## 🧠 Machine Learning Pipeline
-
-The ML service is responsible for processing health-related input and producing a prediction.
-
-```mermaid
+``` mermaid
 flowchart TD
-    A["CDC BRFSS Dataset"] --> B["Dataset Loading"]
-    B --> C["Data Preprocessing"]
-    C --> D["Feature Selection"]
-    D --> E["Class Imbalance Handling"]
-    E --> F["SMOTE"]
-    F --> G["Train Logistic Regression"]
-    G --> H["Evaluate Model"]
-    H --> I["Prediction Service"]
-    I --> J["New Patient Input"]
-    J --> K["Apply Same Preprocessing"]
-    K --> L["Model Prediction"]
-    L --> M["Risk Probability"]
-    M --> N["Risk Percentage"]
+    A["Admin opens dashboard"] --> B["Views pending listings"]
+    B --> C["Inspects property information"]
+    C --> D{"Decision"}
+    D -->|Approve| E["Set status to Active"]
+    E --> F["Record verifier and timestamp"]
+    F --> G["Generate PDF report"]
+    G --> H["Send approval email; attach report if available"]
+    D -->|Reject| I["Set status to Rejected"]
+    I --> J["Save rejection reason and history"]
+    J --> K["Send rejection email"]
 ```
 
-### Algorithm: Logistic Regression
+### 4. Real-time buyer--seller chat
 
-Logistic Regression is a supervised Machine Learning algorithm used for classification.
+``` mermaid
+sequenceDiagram
+    actor Buyer
+    actor Seller
+    participant Client as React + Socket.IO
+    participant Server as Express + Socket.IO
+    participant DB as MongoDB
 
-It estimates the probability of a sample belonging to a particular class.
+    Buyer->>Server: Start or open conversation
+    Server->>DB: Find/create conversation
+    Server-->>Client: Conversation details
+    Buyer->>Server: Send message event
+    Server-->>Seller: new-message event
+    Server-->>Seller: message-notification event
+    Buyer->>Server: typing event
+    Server-->>Seller: user-typing event
+    Note over Client,DB: Message history is also handled through REST API endpoints.
+```
 
-The logistic function is:
+### 5. Support chatbot
 
-\[
-P(y=1 \mid x)=\frac{1}{1+e^{-z}}
-\]
+1.  User submits a support question in the frontend.
+2.  Frontend sends the query to the chatbot API.
+3.  Backend sends the question with the Property Bazzar support
+    instructions to Groq.
+4.  The Llama 3.1 8B Instant model generates a response.
+5.  If the external API call fails, the backend returns a support
+    fallback message.
 
-Where:
-
-\[
-z=w_0+w_1x_1+w_2x_2+\cdots+w_nx_n
-\]
-
-- \(x_i\): Input feature.
-- \(w_i\): Learned model coefficient.
-- \(w_0\): Intercept.
-- \(P(y=1 \mid x)\): Predicted probability of the positive class.
-
-The probability can be represented as a percentage:
-
-\[
-Risk\ Percentage=P(y=1 \mid x)\times100
-\]
-
-### Explainability
-
-Logistic Regression coefficients can help indicate how individual features influence the model's prediction.
-
-For example, features such as BMI, physical activity, blood pressure, and dietary habits may contribute to the predicted result.
-
-The effect of each feature depends on the model's learned coefficients and the preprocessing applied to that feature.
-
-**Important:** These feature relationships are statistical model behavior, not proof that an individual lifestyle factor caused a person's diabetes risk.
-
-### Risk Threshold
-
-The current project describes a notification threshold of 50%.
-
-| Risk percentage | Application behavior |
-|---|---|
-| Below or equal to 50% | Display prediction without high-risk alert |
-| Above 50% | Trigger configured notification workflow |
-
-The 50% value is an application threshold, not a medically validated diagnostic boundary.
-
----
-
-## 💻 Technology Stack
+## 🧰 Technology Stack
 
 ### Frontend
 
-| Technology | Version mentioned | Purpose |
-|---|---|---|
-| React | 19.2.4 | User interface |
-| Vite | 8.0.4 | Development and build tool |
-| Electron | 41.4.0 | Desktop application |
-| React Router DOM | 7.14.1 | Frontend routing |
-| Axios | 1.15.0 | HTTP requests |
+  Technology                Purpose
+  ------------------------- -----------------------------------------
+  React 19                  Component-based UI
+  Vite 8                    Development server and production build
+  React Router 7            Client-side routing
+  Tailwind CSS 4            Styling and responsive layouts
+  Axios                     HTTP requests
+  Socket.IO Client          Real-time communication
+  Framer Motion             UI animations
+  Recharts                  Dashboard charts
+  i18next / react-i18next   English and Hindi translations
+  React Icons               Icon library
+  Google Maps React API     Map integration
 
 ### Backend
 
-| Technology | Version mentioned | Purpose |
-|---|---|---|
-| Node.js | 22.x | JavaScript runtime |
-| Express | 4.21 | Backend framework |
-| Mongoose | 8.x | MongoDB ODM |
-| whatsapp-web.js | Latest | WhatsApp automation |
-| qrcode-terminal | Latest | QR code display |
-| Nodemailer | Latest | Email delivery |
-| dotenv | Latest | Environment configuration |
-| cors | Latest | Cross-origin requests |
+  Technology             Purpose
+  ---------------------- -------------------------------------
+  Node.js                JavaScript runtime
+  Express 4              REST API framework
+  MongoDB + Mongoose 8   Database and ODM
+  JSON Web Token         Authentication tokens
+  bcryptjs               Password hashing
+  Socket.IO              Real-time events
+  Multer                 Multipart file handling
+  Cloudinary SDK         Image storage
+  Brevo API              Transactional email delivery
+  PDFKit                 PDF report generation
+  Groq SDK               Support chatbot integration
+  Compromise             Natural-language processing utility
+  Moment                 Date and time utilities
 
-### Machine Learning
+## 📂 Project Structure
 
-| Technology | Version mentioned | Purpose |
-|---|---|---|
-| Python | 3.14 | ML runtime |
-| FastAPI | 0.115 | Prediction API |
-| Uvicorn | Latest | ASGI server |
-| scikit-learn | 1.8.0 | Machine Learning |
-| pandas | 3.0.2 | Data processing |
-| NumPy | 2.4.4 | Numerical operations |
-| ucimlrepo | 0.0.7 | Dataset retrieval |
-
-### Database and Dataset
-
-| Technology | Purpose |
-|---|---|
-| MongoDB Atlas | Cloud database |
-| CDC BRFSS 2015 | Machine Learning dataset |
-
-### Desktop
-
-| Technology | Purpose |
-|---|---|
-| Electron | Desktop application wrapper |
-| electron-builder | Windows executable packaging |
-
----
-
-## 📁 Project Structure
-
-```text
-diabities/
+``` text
+Property-bazaar-main/
+├── backend/
+│   ├── config/
+│   │   ├── cloudinary.js
+│   │   ├── db.js
+│   │   └── email.js
+│   ├── controllers/
+│   │   ├── adminController.js
+│   │   ├── chatController.js
+│   │   ├── favoriteController.js
+│   │   ├── propertyController.js
+│   │   ├── reviewController.js
+│   │   └── userController.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── upload.js
+│   ├── models/
+│   │   ├── Conversation.js
+│   │   ├── Message.js
+│   │   ├── Property.js
+│   │   ├── Review.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── adminRoutes.js
+│   │   ├── chatbotRoutes.js
+│   │   ├── chatRoutes.js
+│   │   ├── favoriteRoutes.js
+│   │   ├── propertyRoutes.js
+│   │   └── userRoutes.js
+│   ├── utils/
+│   │   ├── emailTemplates.js
+│   │   ├── generatePropertyReport.js
+│   │   ├── generateToken.js
+│   │   └── otpEmail.js
+│   ├── createAdmin.js
+│   ├── server.js
+│   └── package.json
 │
 ├── frontend/
 │   ├── public/
-│   │   └── app-icon.ico
-│   │
+│   │   └── locales/
+│   │       ├── en/translation.json
+│   │       └── hi/translation.json
 │   ├── src/
+│   │   ├── components/
+│   │   │   ├── FavoriteButton.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── PropertyMap.jsx
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   ├── StarRating.jsx
+│   │   │   └── SupportChatbot.jsx
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── SocketContext.jsx
+│   │   │   └── ThemeContext.jsx
+│   │   ├── pages/
+│   │   │   ├── AboutPage.jsx
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   ├── BuyPropertyPage.jsx
+│   │   │   ├── ChatPage.jsx
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── ProfilePage.jsx
+│   │   │   ├── PropertyDetailPage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   ├── SellPropertyPage.jsx
+│   │   │   └── VerifyOtpPage.jsx
+│   │   ├── utils/api.js
 │   │   ├── App.jsx
-│   │   ├── App.css
-│   │   ├── main.jsx
-│   │   └── index.css
-│   │
-│   ├── electron.cjs
+│   │   └── main.jsx
 │   ├── vite.config.js
-│   ├── package.json
-│   └── index.html
-│
-├── backend/
-│   ├── server.js
-│   ├── .env
 │   └── package.json
-│
-├── ml_api/
-│   ├── main.py
-│   ├── requirements.txt
-│   └── venv/
 │
 └── README.md
 ```
 
-**Note:** The `venv/` and `node_modules/` directories are generated during installation and should not normally be committed to Git.
+## 🗃️ Data Models
 
----
+The application uses MongoDB collections defined with Mongoose.
 
-## ⚙️ Prerequisites
+  -----------------------------------------------------------------------
+  Model                               Main data
+  ----------------------------------- -----------------------------------
+  **User**                            Name, email, phone, hashed
+                                      password, role, verification state,
+                                      OTP metadata and saved property
+                                      references
 
-Install the following before starting:
+  **Property**                        Owner, seller details, property
+                                      category, registration/land-record
+                                      details, title, description,
+                                      dimensions, address, pricing,
+                                      images, status, verification
+                                      metadata, ratings and views
 
-| Requirement | Recommended |
-|---|---|
-| Operating System | Windows 10/11 64-bit |
-| Node.js | 22.x |
-| npm | Included with Node.js |
-| Python | Compatible with your installed ML package versions |
-| MongoDB | MongoDB Atlas or local MongoDB |
-| RAM | 8 GB minimum; 16 GB recommended |
-| Storage | 2 GB free space |
-| Internet | Required for initial setup and external services |
+  **Review**                          Property reference, user reference,
+                                      rating and comment; one review per
+                                      user/property pair
 
-Also prepare:
+  **Conversation**                    Property reference, participant
+                                      references, last-message
+                                      preview/time and unread-count map
 
-- MongoDB Atlas account.
-- WhatsApp account for linking the notification session.
-- Gmail account and app password if email notifications are enabled.
+  **Message**                         Property reference, sender,
+                                      receiver, message content and read
+                                      metadata
+  -----------------------------------------------------------------------
 
----
+### Property lifecycle
 
-## 🚀 Installation
+`Pending → Active` (approved) or `Pending → Rejected` (rejected). The
+schema also supports `Draft`, `Sold` and `Expired` states.
 
-### 1. Clone the Repository
+## ⚙️ Getting Started
 
-```powershell
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd diabities
+### Prerequisites
+
+-   Node.js (use a current LTS release compatible with the project
+    dependencies)
+-   npm
+-   MongoDB Atlas account or a reachable MongoDB instance
+-   Cloudinary account
+-   Brevo account/API key for email delivery
+-   Groq API key for the support chatbot
+-   Google Maps API key for map functionality
+
+### 1. Clone the repository
+
+``` bash
+git clone <YOUR_REPOSITORY_URL>
+cd Property-bazaar-main
 ```
 
-Replace the placeholder with your actual GitHub repository URL.
+### 2. Configure and start the backend
 
-### 2. Configure the Python ML Service
-
-Open a terminal:
-
-```powershell
-cd ml_api
-
-python -m venv venv
-
-.\venv\Scripts\Activate.ps1
-```
-
-If PowerShell blocks activation, you can use:
-
-```powershell
-.\venv\Scripts\activate.bat
-```
-
-Install dependencies:
-
-```powershell
-pip install -r requirements.txt
-```
-
-If your `requirements.txt` is not populated yet, the dependencies described in the original setup are:
-
-```powershell
-pip install fastapi uvicorn scikit-learn pandas numpy ucimlrepo
-```
-
-### 3. Configure the Node.js Backend
-
-Open another terminal:
-
-```powershell
+``` bash
 cd backend
-
 npm install
 ```
 
-The original setup lists these backend packages:
+Create `backend/.env`:
 
-```powershell
-npm install express mongoose whatsapp-web.js qrcode-terminal nodemailer cors dotenv
-```
-
-Use the committed `package.json` as the source of truth for dependencies.
-
-### 4. Configure MongoDB Atlas
-
-1. Open [MongoDB Atlas](https://www.mongodb.com/atlas/database).
-2. Create an account.
-3. Create a cluster.
-4. Create a database user.
-5. Configure your network access allowlist.
-6. Open Connect → Drivers.
-7. Copy your MongoDB connection string.
-8. Add the connection string to your backend environment file.
-
-Do not publish your MongoDB username or password.
-
-### 5. Configure Environment Variables
-
-Create a `.env` file inside the `backend/` directory.
-
-```env
-# MongoDB Connection
-MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/health_tracker?retryWrites=true&w=majority
-
-# Backend Port
+``` env
 PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=replace_with_a_long_random_secret
 
-# Optional Email Notifications
-GMAIL_USER=your_email@gmail.com
-GMAIL_PASS=your_gmail_app_password
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-# Alert Recipient
-GOVT_EMAIL=health_alert@example.com
+# Brevo email API
+BREVO_API_KEY=your_brevo_api_key
+EMAIL_FROM=your_verified_sender_email
+
+# Groq chatbot
+GROQ_API_KEY=your_groq_api_key
 ```
 
-Replace all placeholders with your actual credentials.
+Start the backend:
 
-**Security:** Never commit `.env` to GitHub. Add it to `.gitignore`.
-
-### 6. WhatsApp Authentication
-
-The application uses `whatsapp-web.js` for WhatsApp notifications.
-
-On the first startup:
-
-1. Start the Node.js backend.
-2. Wait for the QR code in the terminal.
-3. Open WhatsApp on your phone.
-4. Navigate to **Linked Devices**.
-5. Select **Link a Device**.
-6. Scan the terminal QR code.
-7. Wait for the connection confirmation.
-
-The authentication session is stored locally for subsequent runs, depending on the configured authentication strategy.
-
----
-
-## ▶️ Running the Application
-
-You need three separate terminals.
-
-### Terminal 1: Python ML Service
-
-```powershell
-cd ml_api
-
-.\venv\Scripts\Activate.ps1
-
-uvicorn main:app --host 127.0.0.1 --port 8000
-```
-
-Expected service address:
-
-```text
-http://127.0.0.1:8000
-```
-
-If the application downloads the dataset and trains the model during startup, the first startup may take longer.
-
-### Terminal 2: Node.js Backend
-
-```powershell
-cd backend
-
-node server.js
-```
-
-Expected backend address:
-
-```text
-http://localhost:5000
-```
-
-The terminal should show the backend and database connection status.
-
-### Terminal 3: React Frontend
-
-```powershell
-cd frontend
-
-npm install
-
+``` bash
 npm run dev
 ```
 
-Open:
+The API runs at `http://localhost:5000` by default.
 
-```text
-http://localhost:5173
+Health check:
+
+``` text
+GET http://localhost:5000/api/health
 ```
 
-All three services must be running for the complete prediction workflow.
+### 3. Configure and start the frontend
 
----
+Open a second terminal:
 
-## 🖥️ Building the Desktop Application
-
-The project uses Electron to package the frontend as a Windows desktop application.
-
-First, ensure the frontend and desktop dependencies are installed:
-
-```powershell
+``` bash
 cd frontend
-
 npm install
 ```
 
-Build the executable:
+Create `frontend/.env`:
 
-```powershell
-npm run build-exe
+``` env
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 ```
 
-The original project configuration specifies the expected output as:
+Start the frontend:
 
-```text
-frontend/release/AI Health Tracker Setup 1.0.0.exe
+``` bash
+npm run dev
 ```
 
-The exact output path and filename depend on the `electron-builder` configuration in `frontend/package.json`.
-
-**Important:** The desktop application still depends on the backend and ML service unless they are separately packaged or deployed. Building the frontend installer does not automatically package MongoDB, the Node.js server, or the Python ML service.
-
----
-
-## 📡 API Documentation
-
-### 1. Python FastAPI Prediction Endpoint
-
-**Method:** `POST`
+Vite prints the local development URL (commonly
+`http://localhost:5173`).
 
-**Endpoint:**
-
-```http
-http://127.0.0.1:8000/predict-risk
-```
-
-**Example request:**
-
-```json
-{
-  "phone": "9876543210",
-  "age": 45,
-  "bmi": 28.5,
-  "high_bp": 1,
-  "phys_activity": 0,
-  "fruits": 1,
-  "veggies": 0
-}
-```
-
-**Example response:**
-
-```json
-{
-  "risk_percentage": 42.35
-}
-```
-
-The request fields shown above are based on the original project documentation. Their exact validation types and accepted ranges should be confirmed in `ml_api/main.py`.
-
-### 2. Node.js Express Prediction Endpoint
-
-**Method:** `POST`
-
-**Endpoint:**
-
-```http
-http://localhost:5000/api/calculate-risk
-```
-
-**Example request:**
-
-```json
-{
-  "phone": "9876543210",
-  "age": 45,
-  "bmi": 28.5,
-  "high_bp": 1,
-  "phys_activity": 0,
-  "fruits": 1,
-  "veggies": 0
-}
-```
-
-**Example response:**
-
-```json
-{
-  "status": "success",
-  "risk_percentage": 42.35,
-  "alert_sent": false
-}
-```
+## 🔐 Environment Variables
 
-The response structure above represents the documented example, not a verified response captured from the running API.
+  ----------------------------------------------------------------------------
+  Variable                     Used by                 Required for
+  ---------------------------- ----------------------- -----------------------
+  `PORT`                       Backend                 API server port;
+                                                       defaults to `5000`
 
-### API Request Flow
+  `MONGODB_URI`                Backend                 MongoDB connection
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant React
-    participant Express as Node.js Express
-    participant FastAPI as Python FastAPI
-    participant Model as ML Model
-    participant DB as MongoDB
-    participant WA as WhatsApp
+  `JWT_SECRET`                 Backend                 Signing/verifying
+                                                       authentication tokens
 
-    User->>React: Submit health questionnaire
-    React->>Express: POST /api/calculate-risk
-    Express->>FastAPI: POST /predict-risk
-    FastAPI->>Model: Predict health risk
-    Model-->>FastAPI: Probability
-    FastAPI-->>Express: Risk percentage
-    Express->>DB: Save prediction
-    opt Risk exceeds 50%
-        Express->>WA: Trigger alert
-    end
-    Express-->>React: Final result
-    React-->>User: Display risk result
-```
+  `CLOUDINARY_CLOUD_NAME`      Backend                 Cloudinary account
 
----
+  `CLOUDINARY_API_KEY`         Backend                 Cloudinary
+                                                       authentication
 
-## 🧪 Test Cases
+  `CLOUDINARY_API_SECRET`      Backend                 Cloudinary
+                                                       authentication
 
-The following test cases can be used to validate the application manually.
+  `BREVO_API_KEY`              Backend                 Sending transactional
+                                                       emails
 
-| Test Case | Scenario | Expected Behavior |
-|---|---|---|
-| TC01 | Start frontend | React application loads |
-| TC02 | Start backend | Express server starts |
-| TC03 | Connect MongoDB | Database connection succeeds |
-| TC04 | Start ML API | FastAPI starts successfully |
-| TC05 | Submit valid questionnaire | Risk prediction is returned |
-| TC06 | Submit invalid input | Validation error is returned |
-| TC07 | Risk exceeds 50% | WhatsApp alert workflow is triggered |
-| TC08 | Risk is below threshold | No high-risk alert is triggered |
-| TC09 | WhatsApp session missing | QR authentication is requested |
-| TC10 | MongoDB unavailable | Database error is handled |
-| TC11 | ML API unavailable | Backend reports prediction service failure |
-| TC12 | Build desktop app | Electron installer is generated |
+  `EMAIL_FROM`                 Backend                 Verified sender
+                                                       identity, if configured
+                                                       by the email service
 
-These are proposed test scenarios; they are not a claim that automated tests currently exist.
+  `GROQ_API_KEY`               Backend                 Support chatbot
+                                                       responses
 
----
+  `VITE_GOOGLE_MAPS_API_KEY`   Frontend                Google Maps
+                                                       functionality
+  ----------------------------------------------------------------------------
 
-## 🔐 Security and Privacy
+Keep real credentials in local environment files or your deployment
+provider's secret manager. Never commit `.env` files.
 
-The application processes health-related information, so security and privacy are especially important.
+## 📜 Available Scripts
 
-Recommended practices:
+### Backend (`backend/`)
 
-- Store secrets in environment variables.
-- Never expose MongoDB credentials in frontend code.
-- Restrict database network access.
-- Validate all incoming request fields.
-- Use HTTPS in production.
-- Avoid logging patient phone numbers or sensitive health information.
-- Protect patient records with authentication and authorization.
-- Apply rate limiting to prediction and notification endpoints.
-- Secure WhatsApp authentication data.
-- Define a clear data retention and deletion policy.
+  Command         Description
+  --------------- ------------------------------
+  `npm install`   Install backend dependencies
+  `npm run dev`   Start the API using Nodemon
+  `npm start`     Start the API with Node.js
 
-### Medical Disclaimer
+### Frontend (`frontend/`)
 
-This project is intended for educational and informational health risk screening purposes only.
+  Command             Description
+  ------------------- -------------------------------
+  `npm install`       Install frontend dependencies
+  `npm run dev`       Start Vite development server
+  `npm run build`     Create production build
+  `npm run preview`   Preview the production build
+  `npm run lint`      Run ESLint
 
-It is not a substitute for professional medical advice, clinical testing, or diagnosis. A prediction generated by the Machine Learning model must not be used as the sole basis for medical decisions.
+## 🔌 API Route Groups
 
-Users should consult qualified healthcare professionals for medical evaluation.
+The backend mounts these route groups:
 
----
+  -----------------------------------------------------------------------
+  Base path                           Responsibility
+  ----------------------------------- -----------------------------------
+  `/api/users`                        Registration, OTP verification,
+                                      login and user profile operations
 
-## 🔧 Troubleshooting
+  `/api/users/favorites`              Favourite property operations
 
-| Problem | Possible Cause | Solution |
-|---|---|---|
-| `ModuleNotFoundError` | Python dependency missing | Activate the virtual environment and install requirements |
-| `uvicorn is not recognized` | Virtual environment not activated | Activate `venv` before running Uvicorn |
-| MongoDB connection error | Incorrect URI or network configuration | Check `MONGO_URI` and Atlas access settings |
-| `422 Unprocessable Entity` | Request body does not match FastAPI schema | Verify the request fields and data types in `main.py` |
-| WhatsApp QR not displayed | Session or browser initialization problem | Check backend logs and WhatsApp authentication configuration |
-| Prediction API unavailable | Python service not running | Start FastAPI on port 8000 |
-| Frontend API error | Incorrect backend URL or CORS settings | Check Express port and CORS configuration |
-| Port already in use | Another process occupies the port | Stop the process or configure a different port |
+  `/api/properties`                   Property listing, details and
+                                      seller property management
 
-### Find a Process Using a Port
+  `/api/admin`                        Admin dashboard, analytics and
+                                      listing review
 
-For example, to find the process using port 5000:
+  `/api/chat`                         Conversations and message history
 
-```powershell
-netstat -ano | findstr :5000
-```
+  `/api/chatbot`                      AI-assisted support chat
+  -----------------------------------------------------------------------
 
-Stop the process using its PID:
+Additional endpoints:
 
-```powershell
-taskkill /PID <PID_NUMBER> /F
-```
+-   `GET /` --- API welcome/status response.
+-   `GET /api/health` --- API and database health information.
 
-Replace `<PID_NUMBER>` with the actual process ID.
+Refer to the route files in `backend/routes/` for the exact HTTP
+methods, endpoint paths and access requirements.
 
----
+## ☁️ Deployment Notes
 
-## 🚀 Limitations and Future Improvements
+A typical deployment can use:
 
-Potential improvements include:
-
-- Save trained models rather than training them on every service startup.
-- Add model evaluation metrics such as precision, recall, F1-score, ROC-AUC, and confusion matrix.
-- Add cross-validation and more rigorous model validation.
-- Improve prediction explanations using SHAP or another explainability method.
-- Add patient authentication and role-based access controls.
-- Add historical prediction tracking.
-- Add patient dashboard and health trend visualization.
-- Improve notification delivery tracking and retries.
-- Add automated backend and ML API tests.
-- Containerize the three services using Docker.
-- Deploy the application using cloud infrastructure.
-- Add model monitoring and data drift detection.
-
----
-
-## 👨‍💻 Author
-
-**Rishabh Tiwari**
-
-Full-Stack Developer & AI/ML Enthusiast
-
-- GitHub: [@Rishabh-022](https://github.com/Rishabh-022)
-
-### Project Highlights
-
-This project demonstrates practical experience with:
-
-- Full-Stack Development.
-- Machine Learning and Data Science.
-- Microservice Architecture.
-- REST API Development.
-- MongoDB Database Integration.
-- Automated Notification Systems.
-- Electron Desktop Application Development.
-
----
-
-## 📄 License
-
-This project is intended to be distributed under the MIT License, as indicated in the original project documentation.
-
-If you use the MIT license, include a `LICENSE` file in the repository with the complete license text.
-
----
-
-<div align="center">
-
-### ⭐ If you find this project useful, consider starring the repository!
-
-**Built with React, Node.js, Python, FastAPI, MongoDB, and Machine Learning.**
-
-</div>
+-   **Frontend:** Vercel or another static hosting platform.
+-   **Backend:** Node.js hosting that supports persistent HTTP and
+    WebSocket connections.
+-   **Database:** MongoDB Atlas.
+-   **Images:** Cloudinary.
+-   **Email:** Brevo.
+-   **Chatbot:** Groq API.
+
+Before deploying:
+
+1.  Set production environment variables in the hosting dashboard.
+2.  Add the deployed frontend origin to the Express and Socket.IO CORS
+    allowlists in `backend/server.js`.
+3.  Configure the frontend API base URL for the deployed backend.
+4.  Configure the Google Maps key and allowed referrers.
+5.  Ensure the backend host supports Socket.IO/WebSocket connections.
+6.  Use HTTPS and restrict database/network access.
+
+## 🛡️ Security Notes
+
+-   Passwords are hashed using `bcryptjs`.
+-   JWT middleware protects authenticated routes.
+-   Admin-only operations should remain restricted to admin-authorised
+    users.
+-   OTPs have an expiry window.
+-   Validate and limit uploaded files and request payloads.
+-   Keep API keys and database credentials out of source control.
+-   Configure CORS with only trusted production origins.
+-   Do not expose sensitive identity/document values in logs or public
+    API responses.
+-   Property review is an application workflow, not a substitute for
+    legal due diligence.
+
+## 🧭 Roadmap
+
+Potential next improvements:
+
+-   Automated backend and frontend test suites.
+-   Stronger request validation and API documentation (OpenAPI/Swagger).
+-   Rate limiting and security headers.
+-   More granular property search filters and saved searches.
+-   Improved message delivery/read receipts and robust socket
+    authentication.
+-   Production monitoring, structured logging and error tracking.
+-   A complete payment/booking workflow if payments are added to the
+    codebase.
+
+------------------------------------------------------------------------
+
+### Made with ❤️ for a better property discovery experience
+
+**Property Bazzar**
+:::
